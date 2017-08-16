@@ -23,9 +23,14 @@ public class NotifyUtil {
 
     public static SingleLineBuilder buildSimple(int id, int smallIcon, CharSequence contentTitle, CharSequence contentText, PendingIntent contentIntent) {
         SingleLineBuilder builder = new SingleLineBuilder();
-        builder.setBase(smallIcon, contentTitle, contentText)
-                .setId(id)
+        builder.setBase(smallIcon, contentTitle, contentText).setId(id)
                 .setContentIntent(contentIntent);
+        return builder;
+    }
+
+    public static BigTextBuilder buildBigText(int id,int smallIcon,CharSequence contentTitle,CharSequence contentText){
+        BigTextBuilder builder = new BigTextBuilder();
+        builder.setBase(smallIcon, contentTitle, contentText).setId(id);
         return builder;
     }
 

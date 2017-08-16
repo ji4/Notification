@@ -9,15 +9,17 @@ import android.app.PendingIntent;
 
 public class BaseBuilder {
     //basic UI
-    private int smallIcon;
-    private CharSequence contentTitle;
-    private CharSequence contentText;
+    protected int smallIcon;
+    protected CharSequence contentTitle;
+    protected CharSequence contentText;
+
+    protected CharSequence summaryText;
 
     //basic notification manager
     private int id;
     private PendingIntent contentIntent;
 
-    protected Notification.Builder m_builder;
+    protected Notification.Builder builder;
 
 
     public BaseBuilder setBase(int smallIcon, CharSequence contentTitle, CharSequence contentText) {
@@ -32,25 +34,30 @@ public class BaseBuilder {
         return this;
     }
 
+    public BaseBuilder setSummaryText(CharSequence summaryText){
+        this.summaryText = summaryText;
+        return this;
+    }
+
     public BaseBuilder setContentIntent(PendingIntent contentIntent) {
         this.contentIntent = contentIntent;
         return this;
     }
 
-    private void setNotificationBuilder() {
-        m_builder = new Notification.Builder(NotifyUtil.g_context);
-        m_builder.setContentIntent(contentIntent); //The Intent a notification activates
+    protected void setNotificationBuilder() {
+        builder = new Notification.Builder(NotifyUtil.g_context);
+        builder.setContentIntent(contentIntent); //The Intent a notification activates
 
         if (smallIcon > 0)
-            m_builder.setSmallIcon(smallIcon);
+            builder.setSmallIcon(smallIcon);
 
-        m_builder.setContentTitle(contentTitle);
-        m_builder.setContentText(contentText);
+        builder.setContentTitle(contentTitle);
+        builder.setContentText(contentText);
     }
 
     public void show() {
         setNotificationBuilder();
-        Notification notification = m_builder.build(); //build a notification
+        Notification notification = builder.build(); //build a notification
         NotifyUtil.notify(id, notification);
     }
 }
