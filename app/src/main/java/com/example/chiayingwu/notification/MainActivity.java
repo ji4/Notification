@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-    private Button m_btn_simple, m_btn_bigText, m_btn_bigPic;
+    private Button m_btn_simple, m_btn_bigText,m_btn_inbox, m_btn_bigPic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +31,12 @@ public class MainActivity extends AppCompatActivity {
                             "History of the world is commonly understood as spanning the major geopolitical developments of about five millennia, from the first civilizations to the present. In terms such as world religion, world language, world government, and world war, world suggests international or intercontinental scope without necessarily implying participation of the entire world.")
                             .show();
                     break;
+                case R.id.btn_inbox:
+                    NotifyUtil.buildInbox(4, R.drawable.ic_launcher, "inbox title")
+                            .addMsg("1. someone published an article.")
+                            .addMsg("2. It's sunny today.")
+                            .show();
+                    break;
                 case R.id.btn_bigPic:
                     NotifyUtil.buildBigPic(3, R.drawable.ic_launcher, "picTitle", "allen uploaded a picture!", "summary")
                             .setPicture(R.drawable.scenery)
@@ -43,12 +49,14 @@ public class MainActivity extends AppCompatActivity {
     private void findViews() {
         m_btn_simple = (Button) findViewById(R.id.btn_simple);
         m_btn_bigText = (Button) findViewById(R.id.btn_bigText);
+        m_btn_inbox= (Button) findViewById(R.id.btn_inbox);
         m_btn_bigPic = (Button) findViewById(R.id.btn_bigPic);
     }
 
     private void setButtonListener() {
         m_btn_simple.setOnClickListener(btnToNotify);
         m_btn_bigText.setOnClickListener(btnToNotify);
+        m_btn_inbox.setOnClickListener(btnToNotify);
         m_btn_bigPic.setOnClickListener(btnToNotify);
     }
 }

@@ -41,6 +41,12 @@ public class NotifyUtil {
         return builder;
     }
 
+    public static InboxBuilder buildInbox(int id, int smallIcon, CharSequence contentTitle) {
+        InboxBuilder builder = new InboxBuilder();
+        builder.setBase(smallIcon, contentTitle, "").setId(id);
+        return builder;
+    }
+
     public static void notify(int iNotifyId, Notification notification) {
         m_notificationManager.notify(iNotifyId, notification);
     }
