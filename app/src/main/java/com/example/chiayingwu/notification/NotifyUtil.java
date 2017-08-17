@@ -7,6 +7,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import com.example.chiayingwu.notification.builder.BigPicBuilder;
+import com.example.chiayingwu.notification.builder.BigTextBuilder;
+import com.example.chiayingwu.notification.builder.InboxBuilder;
+import com.example.chiayingwu.notification.builder.ProcessBuilder;
+import com.example.chiayingwu.notification.builder.SingleLineBuilder;
+
 /**
  * Created by chiaying.wu on 2017/8/16.
  */

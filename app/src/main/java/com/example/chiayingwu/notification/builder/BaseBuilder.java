@@ -1,9 +1,11 @@
-package com.example.chiayingwu.notification;
+package com.example.chiayingwu.notification.builder;
 
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+
+import com.example.chiayingwu.notification.NotifyUtil;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,8 @@
-package com.example.chiayingwu.notification;
+package com.example.chiayingwu.notification.builder;
 
 import android.app.Notification;
+
+import com.example.chiayingwu.notification.builder.BaseBuilder;
 
 /**
  * Created by chiaying.wu on 2017/8/17.

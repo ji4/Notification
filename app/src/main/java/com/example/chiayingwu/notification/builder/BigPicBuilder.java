@@ -1,9 +1,11 @@
-package com.example.chiayingwu.notification;
+package com.example.chiayingwu.notification.builder;
 
 import android.app.Notification;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.DrawableRes;
+
+import com.example.chiayingwu.notification.NotifyUtil;
 
 /**
  * Created by chiaying.wu on 2017/8/16.
