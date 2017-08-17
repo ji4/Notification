@@ -35,6 +35,12 @@ public class NotifyUtil {
         return builder;
     }
 
+    public static InboxBuilder buildInbox(int id, int smallIcon, CharSequence contentTitle) {
+        InboxBuilder builder = new InboxBuilder();
+        builder.setBase(smallIcon, contentTitle, "").setId(id);
+        return builder;
+    }
+
     public static BigPicBuilder buildBigPic(int id, int smallIcon, CharSequence contentTitle, CharSequence contentText, CharSequence summaryText) {
         BigPicBuilder builder = new BigPicBuilder();
         builder.setBase(smallIcon, contentTitle, contentText).setId(id);
@@ -42,9 +48,10 @@ public class NotifyUtil {
         return builder;
     }
 
-    public static InboxBuilder buildInbox(int id, int smallIcon, CharSequence contentTitle) {
-        InboxBuilder builder = new InboxBuilder();
-        builder.setBase(smallIcon, contentTitle, "").setId(id);
+    public static ProcessBuilder buildProcess(int id, int smallIcon, CharSequence contentTitle, int progress, int max) {
+        ProcessBuilder builder = new ProcessBuilder();
+        builder.setBase(smallIcon, contentTitle, progress + "/" + max).setId(id);
+        builder.setProgress(max, progress, false);
         return builder;
     }
 

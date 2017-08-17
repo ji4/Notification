@@ -21,13 +21,21 @@
         android:text="BigTextStyle" />
 
     <Button
-        android:id="@+id/btn_bigPic"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="BIG PICTURE" />
-    <Button
         android:id="@+id/btn_inbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Inbox Style" />
+
+    <Button
+        android:id="@+id/btn_bigPic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="BIG PICTURE" />
+
+    <Button
+        android:id="@+id/btn_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Progress" />
+
 </LinearLayout>
