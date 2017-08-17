@@ -28,9 +28,16 @@ public class NotifyUtil {
         return builder;
     }
 
-    public static BigTextBuilder buildBigText(int id,int smallIcon,CharSequence contentTitle,CharSequence contentText){
+    public static BigTextBuilder buildBigText(int id, int smallIcon, CharSequence contentTitle, CharSequence contentText) {
         BigTextBuilder builder = new BigTextBuilder();
         builder.setBase(smallIcon, contentTitle, contentText).setId(id);
+        return builder;
+    }
+
+    public static BigPicBuilder buildBigPic(int id, int smallIcon, CharSequence contentTitle, CharSequence contentText, CharSequence summaryText) {
+        BigPicBuilder builder = new BigPicBuilder();
+        builder.setBase(smallIcon, contentTitle, contentText).setId(id);
+        builder.setSummaryText(summaryText);
         return builder;
     }
 
