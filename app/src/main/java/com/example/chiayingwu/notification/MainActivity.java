@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
                     NotifyUtil.buildSimple(1, R.drawable.ic_launcher, "I'm titile", "I'm content", null)
                             .addBtn(R.mipmap.ic_launcher, "left", NotifyUtil.buildIntent(MainActivity.class))
                             .addBtn(R.mipmap.ic_launcher, "right", NotifyUtil.buildIntent(MainActivity.class))
+                            .playSound()
                             .show();
                     break;
                 case R.id.btn_bigText:

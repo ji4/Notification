@@ -2,6 +2,8 @@ package com.example.chiayingwu.notification;
 
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +52,13 @@ public class BaseBuilder {
     }
     /*End of Button Action*/
 
+    private Uri soundUri;
+
+    public BaseBuilder playSound() {
+        soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION); // use system's built-in sound effect
+        return this;
+    }
+
     protected Notification.Builder builder;
 
     public BaseBuilder setBase(int smallIcon, CharSequence contentTitle, CharSequence contentText) {
@@ -86,6 +95,11 @@ public class BaseBuilder {
             for (BtnActionBean bean : listBtnActionBeans) {
                 builder.addAction(bean.icon, bean.text, bean.pendingIntent);
             }
+        }
+
+        //sound
+        if (soundUri != null) {
+            builder.setSound(soundUri);
         }
 
         builder.setContentTitle(contentTitle);
