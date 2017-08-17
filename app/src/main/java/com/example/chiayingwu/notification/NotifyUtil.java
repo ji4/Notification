@@ -5,6 +5,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 
 /**
  * Created by chiaying.wu on 2017/8/16.
@@ -49,6 +50,14 @@ public class NotifyUtil {
 
     public static void notify(int iNotifyId, Notification notification) {
         m_notificationManager.notify(iNotifyId, notification);
+    }
+
+    public static PendingIntent buildIntent(Class _class) {
+        int iFlags = PendingIntent.FLAG_UPDATE_CURRENT;
+        Intent intent = new Intent(NotifyUtil.g_context, _class); //get intent of current Activity
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pi = PendingIntent.getActivity(NotifyUtil.g_context, 0, intent, iFlags); //get pending intent
+        return pi;
     }
 
 
