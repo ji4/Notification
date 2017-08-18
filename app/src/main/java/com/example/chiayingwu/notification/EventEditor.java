@@ -29,11 +29,8 @@ public class EventEditor extends AppCompatActivity {
         m_btn_confirm.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String strEventCode = String.valueOf(m_iEventCode);
-                String strHour = String.valueOf(m_numPicker_hour.getValue());
-                String strMin = String.valueOf(m_numPicker_min.getValue());
-                String strAm_pm = String.valueOf(m_numPicker_am_pm.getValue());
-                KeyValueDB.setEventData(m_context, strEventCode, strHour + "," + strMin + "," + strAm_pm);
+                saveEventData();
+                updateDataOnHomePage();
                 finish();
             }
         });
@@ -69,7 +66,7 @@ public class EventEditor extends AppCompatActivity {
         m_iEventCode = it.getIntExtra("eventCode", -1);
     }
 
-    private void setStoredData(){
+    private void setStoredData() {
         //set stored data
         String strEventData = KeyValueDB.getEventData(m_context, String.valueOf(m_iEventCode));
         if (m_iEventCode != -1 && !strEventData.equals(KeyValueDB.NO_DATA)) {
@@ -84,6 +81,20 @@ public class EventEditor extends AppCompatActivity {
             m_numPicker_min.setValue(m_iMin);
             m_numPicker_am_pm.setValue(m_iAm_pm);
         }
+    }
+
+    private void saveEventData(){
+        String strEventCode = String.valueOf(m_iEventCode);
+        String strHour = String.valueOf(m_numPicker_hour.getValue());
+        String strMin = String.valueOf(m_numPicker_min.getValue());
+        String strAm_pm = String.valueOf(m_numPicker_am_pm.getValue());
+        KeyValueDB.setEventData(m_context, strEventCode, strHour + "," + strMin + "," + strAm_pm);
+    }
+
+    private void updateDataOnHomePage(){
+        Intent it = new Intent();
+        it.putExtra("eventCode", m_iEventCode);
+        setResult(RESULT_OK, it);
     }
 
     private void findViews() {

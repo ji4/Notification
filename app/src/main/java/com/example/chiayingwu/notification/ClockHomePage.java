@@ -12,9 +12,20 @@ import java.util.Arrays;
 
 public class ClockHomePage extends AppCompatActivity {
     private Button m_btn_time;
-    private static final int requestCode = 0;
+    private static final int EVENT_EDITOR = 0;
     private Context m_context;
     ArrayList<Button> m_eventButtons;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == EVENT_EDITOR) {
+            if (resultCode == RESULT_OK) {
+                int iEventCode = data.getIntExtra("eventCode", -1);
+                setTimeOnButtonText(iEventCode, m_eventButtons.get(iEventCode));
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +48,7 @@ public class ClockHomePage extends AppCompatActivity {
             if (iEventCode != -1) {
                 Intent it = new Intent(ClockHomePage.this, EventEditor.class);
                 it.putExtra("eventCode", iEventCode);
-                startActivityForResult(it, requestCode);
+                startActivityForResult(it, EVENT_EDITOR);
             }
         }
     };
@@ -49,12 +60,12 @@ public class ClockHomePage extends AppCompatActivity {
 
         m_eventButtons = new ArrayList<>(Arrays.asList(m_btn_time));
         int iEventButtonsSize = m_eventButtons.size();
-        for (int m_iEventCode = 0; m_iEventCode < iEventButtonsSize; m_iEventCode++) {
-            setStoredData(m_iEventCode, m_eventButtons);
+        for (int iEventCode = 0; iEventCode < iEventButtonsSize; iEventCode++) {
+            setTimeOnButtonText(iEventCode, m_eventButtons.get(iEventCode));
         }
     }
 
-    private void setStoredData(int iEventCode, ArrayList<Button> m_eventButtons) {
+    private void setTimeOnButtonText(int iEventCode, Button eventButton) {
         //set stored data
         String strEventData = KeyValueDB.getEventData(m_context, String.valueOf(iEventCode));
         if (iEventCode != -1 && !strEventData.equals(KeyValueDB.NO_DATA)) {
@@ -62,7 +73,7 @@ public class ClockHomePage extends AppCompatActivity {
             String strHour = String.valueOf(iArrltEventData.get(0));
             String strMin = String.valueOf(iArrltEventData.get(1));
             String strAm_pm = String.valueOf(iArrltEventData.get(2));
-            m_eventButtons.get(iEventCode).setText(strHour + " : " + strMin + " " + (strAm_pm == "0" ? "AM" : "PM"));
+            eventButton.setText(strHour + " : " + strMin + " " + (strAm_pm == "0" ? "AM" : "PM"));
         }
     }
 
