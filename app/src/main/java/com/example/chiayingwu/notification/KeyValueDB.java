@@ -8,22 +8,23 @@ import android.content.SharedPreferences;
  */
 
 public class KeyValueDB {
-    private static String PREF_NAME="SP";
+    public static String PREF_NAME="SP";
+    public static String NO_DATA="no_data";
 
     public KeyValueDB() {
     }
 
-    private static SharedPreferences getPrefs(Context context) {
+    public static SharedPreferences getPrefs(Context context) {
         return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
-    public static void setTime(Context context, String strKeyName, String strKeyValue) {
+    public static void setEventData(Context context, String strKeyName, String strKeyValue) {
         SharedPreferences.Editor editor = getPrefs(context).edit();
         editor.putString(strKeyName, strKeyValue);
         editor.commit();
     }
 
-    public static String getTime(Context context, String strKeyName) {
-        return getPrefs(context).getString(strKeyName, "no_data");
+    public static String getEventData(Context context, String strKeyName) {
+        return getPrefs(context).getString(strKeyName, NO_DATA);
     }
 }
