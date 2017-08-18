@@ -20,7 +20,7 @@ public class EventEditor extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_event);
+        setContentView(R.layout.activity_event_editor);
         findViews();
         init();
         getIntentData();
@@ -73,7 +73,7 @@ public class EventEditor extends AppCompatActivity {
         //set stored data
         String strEventData = KeyValueDB.getEventData(m_context, String.valueOf(m_iEventCode));
         if (m_iEventCode != -1 && !strEventData.equals(KeyValueDB.NO_DATA)) {
-            ArrayList<Integer> iArrltEventData = convertEventDataToInt(strEventData);
+            ArrayList<Integer> iArrltEventData = DataConverter.convertEventDataToInt(strEventData);
             m_iHour = iArrltEventData.get(0);
             m_iMin = iArrltEventData.get(1);
             m_iAm_pm = iArrltEventData.get(2);
@@ -85,17 +85,6 @@ public class EventEditor extends AppCompatActivity {
             m_numPicker_am_pm.setValue(m_iAm_pm);
         }
     }
-
-    private ArrayList<Integer> convertEventDataToInt(String strEventData) {
-        ArrayList<Integer> iArrltEventData = new ArrayList<>();
-        String[] strArrEventItemData = strEventData.split(",");
-        for (String strEventItem : strArrEventItemData) {
-            int iEventItemData = Integer.parseInt(strEventItem);
-            iArrltEventData.add(iEventItemData);
-        }
-        return iArrltEventData;
-    }
-
 
     private void findViews() {
         m_numPicker_hour = (NumberPicker) findViewById(R.id.activity_edit_event_numberPicker_hour);
