@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:padding="5dp"
     tools:context="com.example.chiayingwu.notification.EventEditor"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:weightSum="1">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,21 +15,21 @@
         android:orientation="horizontal">
 
         <NumberPicker
-            android:id="@+id/activity_edit_event_numberPicker_hour"
+            android:id="@+id/activity_event_editor_numberPicker_hour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:layout_weight="1.0" />
 
         <NumberPicker
-            android:id="@+id/activity_edit_event_numberPicker_min"
+            android:id="@+id/activity_event_editor_numberPicker_min"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:layout_weight="1.0"/>
 
         <NumberPicker
-            android:id="@+id/activity_edit_event_numberPicker_am_pm"
+            android:id="@+id/activity_event_editor_numberPicker_am_pm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
@@ -36,6 +37,49 @@
 
 
     </LinearLayout>
+
+    <RadioGroup
+        android:id="@+id/activity_event_editor_radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="174dp"
+        android:layout_weight="0.65">
+
+        <RadioButton
+            android:id="@+id/activity_event_editor_rb_simple"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Simple"
+            android:onClick="onNotificationTypeRadioBtnClicked"/>
+
+        <RadioButton
+            android:id="@+id/activity_event_editor_rb_bigText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onNotificationTypeRadioBtnClicked"
+            android:text="BigText" />
+
+        <RadioButton
+            android:id="@+id/activity_event_editor_rb_inbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onNotificationTypeRadioBtnClicked"
+            android:text="Inbox" />
+
+        <RadioButton
+            android:id="@+id/activity_event_editor_rb_bigPicture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onNotificationTypeRadioBtnClicked"
+            android:text="BigPicture" />
+
+        <RadioButton
+            android:id="@+id/activity_event_editor_rb_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onNotificationTypeRadioBtnClicked"
+            android:text="Progress" />
+
+    </RadioGroup>
 
     <Button
         android:id="@+id/activity_edit_event_btn_confirm"

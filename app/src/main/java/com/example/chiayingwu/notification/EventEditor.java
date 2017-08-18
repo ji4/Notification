@@ -7,15 +7,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.NumberPicker;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class EventEditor extends AppCompatActivity {
     private NumberPicker m_numPicker_hour, m_numPicker_min, m_numPicker_am_pm;
     private Button m_btn_confirm;
+    private RadioGroup m_radioGroup;
+
     private int m_iEventCode;
     private int m_iHour, m_iMin, m_iAm_pm, m_iSound, m_iNotification;
+    private int m_iCheckedNotificatioinType;
     private Context m_context;
+    private ArrayList<Integer> m_iArryltNotificationRadioBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +66,9 @@ public class EventEditor extends AppCompatActivity {
         m_numPicker_am_pm.setMaxValue(1);
         m_numPicker_am_pm.setDisplayedValues(new String[]{"AM", "PM"});
         m_numPicker_am_pm.setValue(1);
+
+        /*radio button*/
+        m_radioGroup.check(m_iArryltNotificationRadioBtn.get(0));
     }
 
     private void getIntentData() {
@@ -80,6 +90,20 @@ public class EventEditor extends AppCompatActivity {
             m_numPicker_hour.setValue(m_iHour);
             m_numPicker_min.setValue(m_iMin);
             m_numPicker_am_pm.setValue(m_iAm_pm);
+//            m_radioGroup.check(m_iArryltNotificationRadioBtn.get(m_iNotification));
+        }
+    }
+
+    public void onNotificationTypeRadioBtnClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        for (int i = 0; i < m_iArryltNotificationRadioBtn.size(); i++) {
+            if (view.getId() == m_iArryltNotificationRadioBtn.get(i)) {
+                if (checked) {
+                    m_iCheckedNotificatioinType = i;
+                }
+            }
         }
     }
 
@@ -91,16 +115,24 @@ public class EventEditor extends AppCompatActivity {
         KeyValueDB.setEventData(m_context, strEventCode, strHour + "," + strMin + "," + strAm_pm);
     }
 
-    private void updateDataOnHomePage(){
+    private void updateDataOnHomePage() {
         Intent it = new Intent();
         it.putExtra("eventCode", m_iEventCode);
         setResult(RESULT_OK, it);
     }
 
     private void findViews() {
-        m_numPicker_hour = (NumberPicker) findViewById(R.id.activity_edit_event_numberPicker_hour);
-        m_numPicker_min = (NumberPicker) findViewById(R.id.activity_edit_event_numberPicker_min);
-        m_numPicker_am_pm = (NumberPicker) findViewById(R.id.activity_edit_event_numberPicker_am_pm);
+        m_numPicker_hour = (NumberPicker) findViewById(R.id.activity_event_editor_numberPicker_hour);
+        m_numPicker_min = (NumberPicker) findViewById(R.id.activity_event_editor_numberPicker_min);
+        m_numPicker_am_pm = (NumberPicker) findViewById(R.id.activity_event_editor_numberPicker_am_pm);
+        m_radioGroup = (RadioGroup) findViewById(R.id.activity_event_editor_radioGroup);
         m_btn_confirm = (Button) findViewById(R.id.activity_edit_event_btn_confirm);
+
+        m_iArryltNotificationRadioBtn = new ArrayList<>(Arrays.asList(
+                R.id.activity_event_editor_rb_simple,
+                R.id.activity_event_editor_rb_bigText,
+                R.id.activity_event_editor_rb_inbox,
+                R.id.activity_event_editor_rb_bigPicture,
+                R.id.activity_event_editor_rb_progress));
     }
 }
