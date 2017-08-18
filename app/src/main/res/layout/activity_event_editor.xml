@@ -38,48 +38,68 @@
 
     </LinearLayout>
 
-    <RadioGroup
-        android:id="@+id/activity_event_editor_radioGroup"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="174dp"
-        android:layout_weight="0.65">
-
-        <RadioButton
-            android:id="@+id/activity_event_editor_rb_simple"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Simple"
-            android:onClick="onNotificationTypeRadioBtnClicked"/>
+            android:layout_weight="1.0">
+            <RadioGroup
+                android:id="@+id/activity_event_editor_radioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="174dp"
+                android:layout_weight="0.65">
 
-        <RadioButton
-            android:id="@+id/activity_event_editor_rb_bigText"
+                <RadioButton
+                    android:id="@+id/activity_event_editor_rb_simple"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Simple"
+                    android:onClick="onNotificationTypeRadioBtnClicked"/>
+
+                <RadioButton
+                    android:id="@+id/activity_event_editor_rb_bigText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="onNotificationTypeRadioBtnClicked"
+                    android:text="BigText" />
+
+                <RadioButton
+                    android:id="@+id/activity_event_editor_rb_inbox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="onNotificationTypeRadioBtnClicked"
+                    android:text="Inbox" />
+
+                <RadioButton
+                    android:id="@+id/activity_event_editor_rb_bigPicture"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="onNotificationTypeRadioBtnClicked"
+                    android:text="BigPicture" />
+
+                <RadioButton
+                    android:id="@+id/activity_event_editor_rb_progress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="onNotificationTypeRadioBtnClicked"
+                    android:text="Progress" />
+
+            </RadioGroup>
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onNotificationTypeRadioBtnClicked"
-            android:text="BigText" />
-
-        <RadioButton
-            android:id="@+id/activity_event_editor_rb_inbox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onNotificationTypeRadioBtnClicked"
-            android:text="Inbox" />
-
-        <RadioButton
-            android:id="@+id/activity_event_editor_rb_bigPicture"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onNotificationTypeRadioBtnClicked"
-            android:text="BigPicture" />
-
-        <RadioButton
-            android:id="@+id/activity_event_editor_rb_progress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onNotificationTypeRadioBtnClicked"
-            android:text="Progress" />
-
-    </RadioGroup>
+            android:layout_weight="1.0">
+            <CheckBox
+                android:id="@+id/activity_event_editor_chk_sound"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sound Effect" />
+        </LinearLayout>
+    </LinearLayout>
 
     <Button
         android:id="@+id/activity_edit_event_btn_confirm"

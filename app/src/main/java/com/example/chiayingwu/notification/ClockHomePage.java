@@ -14,7 +14,7 @@ public class ClockHomePage extends AppCompatActivity {
     private Button m_btn_time;
     private static final int EVENT_EDITOR = 0;
     private Context m_context;
-    ArrayList<Button> m_eventButtons;
+    private ArrayList<Button> m_eventButtons;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
