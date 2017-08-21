@@ -18,6 +18,8 @@
         </activity>
          <!--<activity android:name=".ClockHomePage"></activity>-->
         <activity android:name=".EventEditor"></activity>
+        <service android:name=".NotifyService"
+            android:exported="false"/>
     </application>
 
 </manifest>
