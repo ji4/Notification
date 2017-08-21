@@ -105,10 +105,12 @@ public class EventEditor extends AppCompatActivity {
         // Is the button now checked?
         boolean checked = ((RadioButton) view).isChecked();
 
-        for (int i = 0; i < m_iArryltNotificationRadioBtn.size(); i++) {
+        int  iNotificationRadioBtnSize = m_iArryltNotificationRadioBtn.size();
+        for (int i = 0; i < iNotificationRadioBtnSize; i++) {
             if (view.getId() == m_iArryltNotificationRadioBtn.get(i)) {
                 if (checked) {
                     m_iNotification = i;
+                    break;
                 }
             }
         }
