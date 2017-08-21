@@ -17,5 +17,7 @@ public class NotifyService extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
         String dataString = intent.getDataString();
 
+
+
     }
 }

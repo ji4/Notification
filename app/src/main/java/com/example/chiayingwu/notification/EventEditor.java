@@ -40,6 +40,7 @@ public class EventEditor extends AppCompatActivity {
             public void onClick(View view) {
                 saveEventData();
                 updateDataOnHomePage();
+                startNotifyService();
                 finish();
             }
         });
@@ -105,7 +106,7 @@ public class EventEditor extends AppCompatActivity {
         // Is the button now checked?
         boolean checked = ((RadioButton) view).isChecked();
 
-        int  iNotificationRadioBtnSize = m_iArryltNotificationRadioBtn.size();
+        int iNotificationRadioBtnSize = m_iArryltNotificationRadioBtn.size();
         for (int i = 0; i < iNotificationRadioBtnSize; i++) {
             if (view.getId() == m_iArryltNotificationRadioBtn.get(i)) {
                 if (checked) {
@@ -135,6 +136,12 @@ public class EventEditor extends AppCompatActivity {
         Intent it = new Intent();
         it.putExtra("eventCode", m_iEventCode);
         setResult(RESULT_OK, it);
+    }
+
+    private void startNotifyService(){
+        Intent serviceIntent = new Intent(EventEditor.this, NotifyService.class);
+        serviceIntent.putExtra("add", m_iEventCode);
+        startService(serviceIntent);
     }
 
     private void findViews() {
