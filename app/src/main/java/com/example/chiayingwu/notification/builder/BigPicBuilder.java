@@ -21,8 +21,8 @@ public class BigPicBuilder extends BaseBuilder {
     }
 
     @Override
-    protected void setNotificationBuilder() {
-        super.setNotificationBuilder();
+    protected void setupNotificationBuilder() {
+        super.setupNotificationBuilder();
         Notification.BigPictureStyle bigPictureStyle = new Notification.BigPictureStyle();
         if (bitmap == null || bitmap.isRecycled()) {
             if (bigPicture > 0) {

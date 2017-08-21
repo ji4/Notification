@@ -9,8 +9,8 @@ import android.app.Notification;
 public class BigTextBuilder extends BaseBuilder {
 
     @Override
-    protected void setNotificationBuilder() {
-        super.setNotificationBuilder();
+    protected void setupNotificationBuilder() {
+        super.setupNotificationBuilder();
 
         Notification.BigTextStyle bigTextStyle = new Notification.BigTextStyle();
         bigTextStyle.setBigContentTitle(contentTitle).bigText(contentText).setSummaryText(summaryText);
