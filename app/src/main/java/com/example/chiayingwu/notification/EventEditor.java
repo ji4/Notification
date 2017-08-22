@@ -138,9 +138,9 @@ public class EventEditor extends AppCompatActivity {
         setResult(RESULT_OK, it);
     }
 
-    private void startNotifyService(){
+    private void startNotifyService() {
         Intent serviceIntent = new Intent(EventEditor.this, NotifyService.class);
-        serviceIntent.putExtra("add", m_iEventCode);
+        serviceIntent.putExtra(Constants.EVENT_ACTION, String.valueOf(m_iEventCode) + "," + Constants.EVENT_ADD);
         startService(serviceIntent);
     }
 
