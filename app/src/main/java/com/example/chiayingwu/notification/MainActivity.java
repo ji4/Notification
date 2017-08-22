@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.btn_simple:
-                    NotifyUtil.buildSimple(1, R.drawable.ic_launcher, "I'm titile", "I'm content", null)
+                    NotifyUtil.buildSimple(1, R.drawable.ic_launcher, "I'm title", "I'm content", null)
                             .addBtn(R.mipmap.ic_launcher, "left", NotifyUtil.buildIntent(MainActivity.class))
                             .addBtn(R.mipmap.ic_launcher, "right", NotifyUtil.buildIntent(MainActivity.class))
                             .playSound()

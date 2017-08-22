@@ -59,6 +59,7 @@ public class NotifyService extends Service {
     @Override
     public void onCreate() {
         m_context = this;
+        NotifyUtil.init(m_context);
     }
 
     @Override
@@ -79,10 +80,6 @@ public class NotifyService extends Service {
         thread.start();
 
         // Get the HandlerThread's Looper and use it for our Handler
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
         Looper mServiceLooper = thread.getLooper();
         ServiceHandler mServiceHandler = new ServiceHandler(mServiceLooper);
 
