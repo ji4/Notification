@@ -51,6 +51,28 @@ public class NotifyService extends Service {
         // separate thread because the service normally runs in the process's
         // main thread, which we don't want to block.  We also make it
         // background priority so CPU-intensive work will not disrupt our UI.
+    private Boolean checkEventExist(int iEventCode) {
+        for (int i = 0; i < m_iArrExistentEvent.size(); i++) {
+            if (iEventCode == m_iArrExistentEvent.get(i)) { //if the event has existed
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        String strEventAction = intent.getStringExtra(Constants.EVENT_ACTION);
+        ArrayList<Integer> iArrEventCodeAndAction = DataConverter.convertEventDataToInt(strEventAction);
+        int iEventCode = iArrEventCodeAndAction.get(0);
+        int iEventAction = iArrEventCodeAndAction.get(1);
+        if (iEventAction == Constants.EVENT_ADD) {
+            Boolean eventExist = checkEventExist(iEventCode);
+            if (!eventExist) {
+                m_iArrExistentEvent.add(iEventCode);
+            }
+        } else {
+        }//EVENT_CANCEL
         HandlerThread thread = new HandlerThread("ServiceStartArguments",
                 Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
