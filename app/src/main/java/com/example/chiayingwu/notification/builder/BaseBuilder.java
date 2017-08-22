@@ -85,7 +85,7 @@ public class BaseBuilder {
         return this;
     }
 
-    protected void setNotificationBuilder() {
+    protected void setupNotificationBuilder() {
         builder = new Notification.Builder(NotifyUtil.g_context);
         builder.setContentIntent(contentIntent); //The Intent a notification activates
 
@@ -109,7 +109,7 @@ public class BaseBuilder {
     }
 
     public void show() {
-        setNotificationBuilder();
+        setupNotificationBuilder();
         Notification notification = builder.build(); //build a notification
         NotifyUtil.notify(id, notification);
     }

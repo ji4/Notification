@@ -2,8 +2,6 @@ package com.example.chiayingwu.notification.builder;
 
 import android.app.Notification;
 
-import com.example.chiayingwu.notification.builder.BaseBuilder;
-
 /**
  * Created by chiaying.wu on 2017/8/17.
  */
@@ -21,8 +19,8 @@ public class ProcessBuilder extends BaseBuilder {
     }
 
     @Override
-    protected void setNotificationBuilder() {
-        super.setNotificationBuilder();
+    protected void setupNotificationBuilder() {
+        super.setupNotificationBuilder();
         builder.setProgress(m_iMax, m_iProgress, m_isInterminate);
         builder.setDefaults(0);
         builder.setPriority(Notification.PRIORITY_LOW);

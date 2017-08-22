@@ -20,8 +20,8 @@ public class InboxBuilder extends BaseBuilder {
     }
 
     @Override
-    protected void setNotificationBuilder() {
-        super.setNotificationBuilder();
+    protected void setupNotificationBuilder() {
+        super.setupNotificationBuilder();
         Notification.InboxStyle inboxStyle = new Notification.InboxStyle();
         for (String msg : m_strArrMsgList) {
             inboxStyle.addLine(msg);
