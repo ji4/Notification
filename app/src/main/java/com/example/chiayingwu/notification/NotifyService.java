@@ -19,7 +19,7 @@ public class NotifyService extends Service {
     private Context m_context;
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;
-    private ArrayList<Integer> m_iArrScheduledEvent = new ArrayList<>(); //stores Event Code
+    private ArrayList<Integer> m_iArrScheduledEvent = new ArrayList<>(); //stores Event Id
 
     // Handler that receives messages from the thread
     private final class ServiceHandler extends Handler {
@@ -30,13 +30,13 @@ public class NotifyService extends Service {
         @Override
         public void handleMessage(Message msg) {
             Log.d("jia", "handleMessage() called");
-            Log.d("jia", "m_iArrScheduledEvent.size(): "+m_iArrScheduledEvent.size());
+            Log.d("jia", "m_iArrScheduledEvent.size(): " + m_iArrScheduledEvent.size());
 
             while (m_iArrScheduledEvent.size() > 0) {
                 synchronized (this) {
                     for (int i = 0; i < m_iArrScheduledEvent.size(); i++) {
-                        int iEventCode = m_iArrScheduledEvent.get(i);
-                        ArrayList<Integer> iArrStoredEventData = getStoredData(iEventCode);
+                        int iEventId = m_iArrScheduledEvent.get(i);
+                        ArrayList<Integer> iArrStoredEventData = getStoredData(iEventId);
                         long scheduledTime = setScheduledTime(iArrStoredEventData);
                         if (System.currentTimeMillis() >= scheduledTime) {
                             Log.d("jia", "send a notification, scheduledTime: " + scheduledTime + ", currentTime: " + System.currentTimeMillis());
@@ -103,10 +103,10 @@ public class NotifyService extends Service {
         Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
     }
 
-    private ArrayList<Integer> getStoredData(int iEventCode) {
-        String strEventData = KeyValueDB.getEventData(m_context, String.valueOf(iEventCode));
+    private ArrayList<Integer> getStoredData(int iEventId) {
+        String strEventData = KeyValueDB.getEventData(m_context, String.valueOf(iEventId));
         ArrayList<Integer> iArrltEventData = null;
-        if (iEventCode != -1 && !strEventData.equals(KeyValueDB.NO_DATA)) {
+        if (iEventId != -1 && !strEventData.equals(KeyValueDB.NO_DATA)) {
             iArrltEventData = DataConverter.convertEventDataToInt(strEventData);
         }
         return iArrltEventData;
@@ -128,20 +128,20 @@ public class NotifyService extends Service {
 
     private void getIntentData(Intent intent) {
         String strEventAction = intent.getStringExtra(Constants.EVENT_ACTION);
-        ArrayList<Integer> iArrEventCodeAndAction = DataConverter.convertEventDataToInt(strEventAction);
-        int iEventCode = iArrEventCodeAndAction.get(0);
-        int iEventAction = iArrEventCodeAndAction.get(1);
+        ArrayList<Integer> iArrEventIdAndAction = DataConverter.convertEventDataToInt(strEventAction);
+        int iEventId = iArrEventIdAndAction.get(0);
+        int iEventAction = iArrEventIdAndAction.get(1);
         if (iEventAction == Constants.EVENT_ADD) {
-            Boolean eventExist = checkEventExist(iEventCode);
+            Boolean eventExist = checkEventExist(iEventId);
             if (!eventExist) {
-                m_iArrScheduledEvent.add(iEventCode);
+                m_iArrScheduledEvent.add(iEventId);
             }
         }
     }
 
-    private Boolean checkEventExist(int iEventCode) {
+    private Boolean checkEventExist(int iEventId) {
         for (int i = 0; i < m_iArrScheduledEvent.size(); i++) {
-            if (iEventCode == m_iArrScheduledEvent.get(i)) { //if the event has existed
+            if (iEventId == m_iArrScheduledEvent.get(i)) { //if the event has existed
                 return true;
             }
         }

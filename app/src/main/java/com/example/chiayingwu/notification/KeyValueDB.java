@@ -8,8 +8,8 @@ import android.content.SharedPreferences;
  */
 
 public class KeyValueDB {
-    public static String PREF_NAME="SP";
-    public static String NO_DATA="no_data";
+    public static String PREF_NAME = "SP";
+    public static String NO_DATA = "no_data";
 
     public KeyValueDB() {
     }

@@ -21,8 +21,8 @@ public class ClockHomePage extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == EVENT_EDITOR) {
             if (resultCode == RESULT_OK) {
-                int iEventCode = data.getIntExtra("eventCode", -1);
-                setTimeOnButtonText(iEventCode, m_eventButtons.get(iEventCode));
+                int iEventId = data.getIntExtra(Constants.EVENT_ID, -1);
+                setTimeOnButtonText(iEventId, m_eventButtons.get(iEventId));
             }
         }
     }
@@ -39,15 +39,15 @@ public class ClockHomePage extends AppCompatActivity {
     Button.OnClickListener btnForTime = new Button.OnClickListener() {
         @Override
         public void onClick(View view) {
-            int iEventCode = -1;
+            int iEventId = -1;
             switch (view.getId()) {
                 case R.id.activity_clock_home_btn_time:
-                    iEventCode = 0;
+                    iEventId = 0;
                     break;
             }
-            if (iEventCode != -1) {
+            if (iEventId != -1) {
                 Intent it = new Intent(ClockHomePage.this, EventEditor.class);
-                it.putExtra("eventCode", iEventCode);
+                it.putExtra(Constants.EVENT_ID, iEventId);
                 startActivityForResult(it, EVENT_EDITOR);
             }
         }
@@ -60,15 +60,15 @@ public class ClockHomePage extends AppCompatActivity {
 
         m_eventButtons = new ArrayList<>(Arrays.asList(m_btn_time));
         int iEventButtonsSize = m_eventButtons.size();
-        for (int iEventCode = 0; iEventCode < iEventButtonsSize; iEventCode++) {
-            setTimeOnButtonText(iEventCode, m_eventButtons.get(iEventCode));
+        for (int iEventId = 0; iEventId < iEventButtonsSize; iEventId++) {
+            setTimeOnButtonText(iEventId, m_eventButtons.get(iEventId));
         }
     }
 
-    private void setTimeOnButtonText(int iEventCode, Button eventButton) {
+    private void setTimeOnButtonText(int iEventId, Button eventButton) {
         //set stored data
-        String strEventData = KeyValueDB.getEventData(m_context, String.valueOf(iEventCode));
-        if (iEventCode != -1 && !strEventData.equals(KeyValueDB.NO_DATA)) {
+        String strEventData = KeyValueDB.getEventData(m_context, String.valueOf(iEventId));
+        if (iEventId != -1 && !strEventData.equals(KeyValueDB.NO_DATA)) {
             ArrayList<Integer> iArrltEventData = DataConverter.convertEventDataToInt(strEventData);
             String strHour = String.valueOf(iArrltEventData.get(0));
             String strMin = String.valueOf(iArrltEventData.get(1));

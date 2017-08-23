@@ -23,7 +23,7 @@ public class EventEditor extends AppCompatActivity {
     private ArrayList<Integer> m_iArryltNotificationRadioBtn;
     private Button m_btn_confirm;
     //values
-    private int m_iEventCode;
+    private int m_iEventId;
     private int m_iHour, m_iMin, m_iAm_pm, m_iNotification, m_iSound;
 
     @Override
@@ -76,13 +76,13 @@ public class EventEditor extends AppCompatActivity {
 
     private void getIntentData() {
         Intent it = getIntent();
-        m_iEventCode = it.getIntExtra("eventCode", -1);
+        m_iEventId = it.getIntExtra(Constants.EVENT_ID, -1);
     }
 
     private void setStoredData() {
         //set stored data
-        String strEventData = KeyValueDB.getEventData(m_context, String.valueOf(m_iEventCode));
-        if (m_iEventCode != -1 && !strEventData.equals(KeyValueDB.NO_DATA)) {
+        String strEventData = KeyValueDB.getEventData(m_context, String.valueOf(m_iEventId));
+        if (m_iEventId != -1 && !strEventData.equals(KeyValueDB.NO_DATA)) {
             ArrayList<Integer> iArrltEventData = DataConverter.convertEventDataToInt(strEventData);
             m_iHour = iArrltEventData.get(0);
             m_iMin = iArrltEventData.get(1);
@@ -119,7 +119,7 @@ public class EventEditor extends AppCompatActivity {
 
     private void saveEventData() {
         //event code
-        String strEventCode = String.valueOf(m_iEventCode);
+        String strEventId = String.valueOf(m_iEventId);
         //event time
         String strHour = String.valueOf(m_numPicker_hour.getValue());
         String strMin = String.valueOf(m_numPicker_min.getValue());
@@ -129,18 +129,18 @@ public class EventEditor extends AppCompatActivity {
         //event sound effect
         String strPlaySound = m_chk_sound.isChecked() ? "1" : "0";
 
-        KeyValueDB.setEventData(m_context, strEventCode, strHour + "," + strMin + "," + strAm_pm + "," + strNotificationType + "," + strPlaySound);
+        KeyValueDB.setEventData(m_context, strEventId, strHour + "," + strMin + "," + strAm_pm + "," + strNotificationType + "," + strPlaySound);
     }
 
     private void updateDataOnHomePage() {
         Intent it = new Intent();
-        it.putExtra("eventCode", m_iEventCode);
+        it.putExtra(Constants.EVENT_ID, m_iEventId);
         setResult(RESULT_OK, it);
     }
 
     private void startNotifyService() {
         Intent serviceIntent = new Intent(EventEditor.this, NotifyService.class);
-        serviceIntent.putExtra(Constants.EVENT_ACTION, String.valueOf(m_iEventCode) + "," + Constants.EVENT_ADD);
+        serviceIntent.putExtra(Constants.EVENT_ACTION, String.valueOf(m_iEventId) + "," + Constants.EVENT_ADD);
         startService(serviceIntent);
     }
 
