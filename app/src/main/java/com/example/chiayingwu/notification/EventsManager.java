@@ -6,15 +6,20 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class EventsManager extends AppCompatActivity {
     private Button m_btn_time;
+    private CheckBox m_checkBox;
     private static final int EVENT_EDITOR = 0;
     private Context m_context;
     private ArrayList<Button> m_eventButtons;
+    private ArrayList<Integer> m_iArrEventCheckBoxes;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -53,6 +58,24 @@ public class EventsManager extends AppCompatActivity {
         }
     };
 
+    CompoundButton.OnCheckedChangeListener checkBoxListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {//b: isChecked
+            int iEventCheckBoxesSize = m_iArrEventCheckBoxes.size();
+            for (int i = 0; i < iEventCheckBoxesSize; i++) {
+                if (compoundButton.getId() == m_iArrEventCheckBoxes.get(i)) {
+                    if(isChecked){
+                        Toast.makeText(m_context, "checked", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Toast.makeText(m_context, "unchecked", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        }
+    };
+
+
     private void initButtonText() {
         /*shared prefrences*/
         m_context = this;
@@ -80,9 +103,17 @@ public class EventsManager extends AppCompatActivity {
 
     private void findViews() {
         m_btn_time = (Button) findViewById(R.id.activity_events_manager_btn_time);
+        m_eventButtons = new ArrayList<>(Arrays.asList(m_btn_time));
+
+        m_checkBox = (CheckBox) findViewById(R.id.activity_events_manager_checkBox);
+        m_iArrEventCheckBoxes = new ArrayList<>(Arrays.asList(
+                R.id.activity_events_manager_checkBox
+                ));
     }
 
     private void setButtonListener() {
         m_btn_time.setOnClickListener(btnForTime);
+
+        m_checkBox.setOnCheckedChangeListener(checkBoxListener);
     }
 }
