@@ -15,13 +15,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-/**
- * Created by chiaying.wu on 2017/8/21.
- */
-
 public class NotifyService extends Service {
     private Context m_context;
-    private ArrayList<Integer> m_iArrExistentEvent = new ArrayList<>(); //stores Event Code
+    private Looper mServiceLooper;
+    private ServiceHandler mServiceHandler;
+    private ArrayList<Integer> m_iArrScheduledEvent = new ArrayList<>(); //stores Event Code
 
     // Handler that receives messages from the thread
     private final class ServiceHandler extends Handler {
@@ -31,21 +29,20 @@ public class NotifyService extends Service {
 
         @Override
         public void handleMessage(Message msg) {
-            // Normally we would do some work here, like download a file.
-            // For our sample, we just sleep for 5 seconds.
-            int iEventCode = msg.arg2;
-            ArrayList<Integer> iArrStoredEventData = getStoredData(iEventCode);
-            long endTime = 0;
-            if (iArrStoredEventData != null) {
-                endTime = setEndTime(iArrStoredEventData);
-                Log.d("jia", "endTime:" + endTime);
-            }
+            Log.d("jia", "handleMessage() called");
 
-            while (System.currentTimeMillis() < endTime) {
+            while (m_iArrScheduledEvent.size() > 0) {
                 synchronized (this) {
+                    for (int i = 0; i < m_iArrScheduledEvent.size(); i++) {
+                        int iEventCode = m_iArrScheduledEvent.get(i);
+                        ArrayList<Integer> iArrStoredEventData = getStoredData(iEventCode);
+                        long scheduledTime = setEndTime(iArrStoredEventData);
+                        if(scheduledTime >= System.currentTimeMillis()){
+                            Log.d("jia", "send a notification");
+                        }
+                    }
                     try {
-                        Log.d("jia", Thread.currentThread().getName() + " handler running");
-                        wait(endTime - System.currentTimeMillis());
+                        wait(1000);
                     } catch (Exception e) {
                     }
                 }
@@ -58,31 +55,25 @@ public class NotifyService extends Service {
 
     @Override
     public void onCreate() {
+        Log.d("jia", "onCreate() called");
         m_context = this;
         NotifyUtil.init(m_context);
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        String strEventAction = intent.getStringExtra(Constants.EVENT_ACTION);
-        ArrayList<Integer> iArrEventCodeAndAction = DataConverter.convertEventDataToInt(strEventAction);
-        int iEventCode = iArrEventCodeAndAction.get(0);
-        int iEventAction = iArrEventCodeAndAction.get(1);
-        if (iEventAction == Constants.EVENT_ADD) {
-            Boolean eventExist = checkEventExist(iEventCode);
-            if (!eventExist) {
-                m_iArrExistentEvent.add(iEventCode);
-            }
-        } else {
-        }//EVENT_CANCEL
+        // Start up the thread running the service.  Note that we create a
+        // separate thread because the service normally runs in the process's
+        // main thread, which we don't want to block.  We also make it
+        // background priority so CPU-intensive work will not disrupt our UI.
         HandlerThread thread = new HandlerThread("ServiceStartArguments",
                 Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
 
         // Get the HandlerThread's Looper and use it for our Handler
-        Looper mServiceLooper = thread.getLooper();
-        ServiceHandler mServiceHandler = new ServiceHandler(mServiceLooper);
+        mServiceLooper = thread.getLooper();
+        mServiceHandler = new ServiceHandler(mServiceLooper);
+    }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d("jia", "onStartCommand() called");
         Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
 
         // For each start request, send a message to start a job and deliver the
