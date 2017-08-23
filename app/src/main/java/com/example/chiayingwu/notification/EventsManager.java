@@ -10,7 +10,7 @@ import android.widget.Button;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ClockHomePage extends AppCompatActivity {
+public class EventsManager extends AppCompatActivity {
     private Button m_btn_time;
     private static final int EVENT_EDITOR = 0;
     private Context m_context;
@@ -30,7 +30,7 @@ public class ClockHomePage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_clock_home_page);
+        setContentView(R.layout.activity_events_manager);
         findViews();
         setButtonListener();
         initButtonText();
@@ -41,12 +41,12 @@ public class ClockHomePage extends AppCompatActivity {
         public void onClick(View view) {
             int iEventId = -1;
             switch (view.getId()) {
-                case R.id.activity_clock_home_btn_time:
+                case R.id.activity_events_manager_btn_time:
                     iEventId = 0;
                     break;
             }
             if (iEventId != -1) {
-                Intent it = new Intent(ClockHomePage.this, EventEditor.class);
+                Intent it = new Intent(EventsManager.this, EventEditor.class);
                 it.putExtra(Constants.EVENT_ID, iEventId);
                 startActivityForResult(it, EVENT_EDITOR);
             }
@@ -79,7 +79,7 @@ public class ClockHomePage extends AppCompatActivity {
 
 
     private void findViews() {
-        m_btn_time = (Button) findViewById(R.id.activity_clock_home_btn_time);
+        m_btn_time = (Button) findViewById(R.id.activity_events_manager_btn_time);
     }
 
     private void setButtonListener() {
