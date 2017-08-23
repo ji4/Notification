@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.ListIterator;
 
 public class NotifyService extends Service {
     private Context m_context;
@@ -113,20 +114,26 @@ public class NotifyService extends Service {
         calendar.set(Calendar.HOUR, iHour);
         calendar.set(Calendar.MINUTE, iMin);
         calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
         calendar.set(Calendar.AM_PM, iAm_pm == 0 ? Calendar.AM : Calendar.PM);
 
         return calendar.getTimeInMillis();
     }
 
-    private void checkScheduledEventsMatch(){
+    private void checkScheduledEventsMatch() {
         //check if current time matches scheduled time
-        for (int i = 0; i < m_iArrScheduledEvent.size(); i++) {
+        for (ListIterator<Integer> iterator = m_iArrScheduledEvent.listIterator(); iterator.hasNext(); ) {
+            int i = iterator.nextIndex();
+            iterator.next();
+
             int iEventId = m_iArrScheduledEvent.get(i);
             ArrayList<Integer> iArrStoredEventData = getStoredData(iEventId);
             long scheduledTime = setScheduledTime(iArrStoredEventData);
             if (System.currentTimeMillis() >= scheduledTime) {
                 Log.d("jia", "send a notification, scheduledTime: " + scheduledTime + ", currentTime: " + System.currentTimeMillis());
                 NotifyUtil.buildSimple(1, R.drawable.ic_launcher, "title", "content", null).show();
+                KeyValueDB.deleteExpiredEvent(m_context, iEventId);
+                iterator.remove();
             }
         }
     }
