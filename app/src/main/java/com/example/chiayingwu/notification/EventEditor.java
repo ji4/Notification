@@ -141,7 +141,6 @@ public class EventEditor extends AppCompatActivity {
 
     private void startNotifyService() {
         Intent serviceIntent = new Intent(EventEditor.this, NotifyService.class);
-        serviceIntent.putExtra(Constants.EVENT_ACTION, String.valueOf(m_iEventId) + "," + Constants.EVENT_ADD);
         startService(serviceIntent);
     }
 

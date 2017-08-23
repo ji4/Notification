@@ -34,15 +34,7 @@ public class NotifyService extends Service {
 
             while (m_iArrScheduledEvent.size() > 0) {
                 synchronized (this) {
-                    for (int i = 0; i < m_iArrScheduledEvent.size(); i++) {
-                        int iEventId = m_iArrScheduledEvent.get(i);
-                        ArrayList<Integer> iArrStoredEventData = getStoredData(iEventId);
-                        long scheduledTime = setScheduledTime(iArrStoredEventData);
-                        if (System.currentTimeMillis() >= scheduledTime) {
-                            Log.d("jia", "send a notification, scheduledTime: " + scheduledTime + ", currentTime: " + System.currentTimeMillis());
-                            NotifyUtil.buildSimple(1, R.drawable.ic_launcher, "title", "content", null).show();
-                        }
-                    }
+                    checkScheduledEventsMatch();
                     try {
                         wait(1000);
                     } catch (Exception e) {
@@ -77,10 +69,10 @@ public class NotifyService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("jia", "onStartCommand() called");
         Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
-
-        if (intent != null) {
-            getIntentData(intent);
-        }
+        
+        //get all event id from shared pref
+        String strEventIdList = KeyValueDB.getEventIdList(m_context);
+        m_iArrScheduledEvent = DataConverter.convertToIntArray(strEventIdList);
 
         // For each start request, send a message to start a job and deliver the
         // start ID so we know which request we're stopping when we finish the job
@@ -126,25 +118,16 @@ public class NotifyService extends Service {
         return calendar.getTimeInMillis();
     }
 
-    private void getIntentData(Intent intent) {
-        String strEventAction = intent.getStringExtra(Constants.EVENT_ACTION);
-        ArrayList<Integer> iArrEventIdAndAction = DataConverter.convertToIntArray(strEventAction);
-        int iEventId = iArrEventIdAndAction.get(0);
-        int iEventAction = iArrEventIdAndAction.get(1);
-        if (iEventAction == Constants.EVENT_ADD) {
-            Boolean eventExist = checkEventExist(iEventId);
-            if (!eventExist) {
-                m_iArrScheduledEvent.add(iEventId);
-            }
-        }
-    }
-
-    private Boolean checkEventExist(int iEventId) {
+    private void checkScheduledEventsMatch(){
+        //check if current time matches scheduled time
         for (int i = 0; i < m_iArrScheduledEvent.size(); i++) {
-            if (iEventId == m_iArrScheduledEvent.get(i)) { //if the event has existed
-                return true;
+            int iEventId = m_iArrScheduledEvent.get(i);
+            ArrayList<Integer> iArrStoredEventData = getStoredData(iEventId);
+            long scheduledTime = setScheduledTime(iArrStoredEventData);
+            if (System.currentTimeMillis() >= scheduledTime) {
+                Log.d("jia", "send a notification, scheduledTime: " + scheduledTime + ", currentTime: " + System.currentTimeMillis());
+                NotifyUtil.buildSimple(1, R.drawable.ic_launcher, "title", "content", null).show();
             }
         }
-        return false;
     }
 }

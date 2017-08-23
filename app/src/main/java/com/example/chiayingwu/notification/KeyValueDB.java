@@ -32,11 +32,13 @@ public class KeyValueDB {
     }
 
     public static void saveEventId(Context context, int iEventId) {
+        String strEventId = String.valueOf(iEventId);
+
         String strEventIdList = getEventIdList(context);
         if (!strEventIdList.equals(NO_DATA)) {
             ArrayList<Integer> iArrEventId = DataConverter.convertToIntArray(strEventIdList);
             Boolean boolEventExist = checkEventExist(iEventId, iArrEventId);
-            if(!boolEventExist){
+            if (!boolEventExist) {
                 iArrEventId.add(iEventId);
                 strEventIdList = DataConverter.convertToString(iArrEventId);
 
@@ -44,6 +46,10 @@ public class KeyValueDB {
                 editor.putString(ID_LIST, strEventIdList);
                 editor.commit();
             }
+        } else {
+            SharedPreferences.Editor editor = getPrefs(context).edit();
+            editor.putString(ID_LIST, strEventId);
+            editor.commit();
         }
     }
 
