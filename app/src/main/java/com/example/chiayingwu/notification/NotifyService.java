@@ -69,7 +69,7 @@ public class NotifyService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("jia", "onStartCommand() called");
         Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
-        
+
         //get all event id from shared pref
         String strEventIdList = KeyValueDB.getEventIdList(m_context);
         m_iArrScheduledEvent = DataConverter.convertToIntArray(strEventIdList);

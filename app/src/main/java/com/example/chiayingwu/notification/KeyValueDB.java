@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class KeyValueDB {
     public static String PREF_NAME = "SP";
     public static String NO_DATA = "NO_DATA";
-    private static String ID_LIST = "ID_LIST";
+    private static String KEY_ID_LIST = "ID_LIST";
 
     public KeyValueDB() {
     }
@@ -21,10 +21,14 @@ public class KeyValueDB {
         return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
-    public static void setEventData(Context context, String strKeyName, String strKeyValue) {
+    private static void commitToEditor(Context context, String strKeyName, String strKeyValue) {
         SharedPreferences.Editor editor = getPrefs(context).edit();
         editor.putString(strKeyName, strKeyValue);
         editor.commit();
+    }
+
+    public static void setEventData(Context context, String strKeyName, String strKeyValue) {
+        commitToEditor(context, strKeyName, strKeyValue);
     }
 
     public static String getEventData(Context context, String strKeyName) {
@@ -33,7 +37,6 @@ public class KeyValueDB {
 
     public static void saveEventId(Context context, int iEventId) {
         String strEventId = String.valueOf(iEventId);
-
         String strEventIdList = getEventIdList(context);
         if (!strEventIdList.equals(NO_DATA)) {
             ArrayList<Integer> iArrEventId = DataConverter.convertToIntArray(strEventIdList);
@@ -42,19 +45,15 @@ public class KeyValueDB {
                 iArrEventId.add(iEventId);
                 strEventIdList = DataConverter.convertToString(iArrEventId);
 
-                SharedPreferences.Editor editor = getPrefs(context).edit();
-                editor.putString(ID_LIST, strEventIdList);
-                editor.commit();
+                commitToEditor(context, KEY_ID_LIST, strEventIdList);
             }
         } else {
-            SharedPreferences.Editor editor = getPrefs(context).edit();
-            editor.putString(ID_LIST, strEventId);
-            editor.commit();
+            commitToEditor(context, KEY_ID_LIST, strEventId);
         }
     }
 
     public static String getEventIdList(Context context) {
-        return getPrefs(context).getString(ID_LIST, NO_DATA);
+        return getPrefs(context).getString(KEY_ID_LIST, NO_DATA);
     }
 
     private static Boolean checkEventExist(int iEventId, ArrayList<Integer> iArrEventId) {
