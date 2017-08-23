@@ -107,7 +107,7 @@ public class NotifyService extends Service {
         String strEventData = KeyValueDB.getEventData(m_context, String.valueOf(iEventId));
         ArrayList<Integer> iArrltEventData = null;
         if (iEventId != -1 && !strEventData.equals(KeyValueDB.NO_DATA)) {
-            iArrltEventData = DataConverter.convertEventDataToInt(strEventData);
+            iArrltEventData = DataConverter.convertToIntArray(strEventData);
         }
         return iArrltEventData;
     }
@@ -128,7 +128,7 @@ public class NotifyService extends Service {
 
     private void getIntentData(Intent intent) {
         String strEventAction = intent.getStringExtra(Constants.EVENT_ACTION);
-        ArrayList<Integer> iArrEventIdAndAction = DataConverter.convertEventDataToInt(strEventAction);
+        ArrayList<Integer> iArrEventIdAndAction = DataConverter.convertToIntArray(strEventAction);
         int iEventId = iArrEventIdAndAction.get(0);
         int iEventAction = iArrEventIdAndAction.get(1);
         if (iEventAction == Constants.EVENT_ADD) {

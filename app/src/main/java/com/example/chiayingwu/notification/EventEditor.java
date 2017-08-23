@@ -83,7 +83,7 @@ public class EventEditor extends AppCompatActivity {
         //set stored data
         String strEventData = KeyValueDB.getEventData(m_context, String.valueOf(m_iEventId));
         if (m_iEventId != -1 && !strEventData.equals(KeyValueDB.NO_DATA)) {
-            ArrayList<Integer> iArrltEventData = DataConverter.convertEventDataToInt(strEventData);
+            ArrayList<Integer> iArrltEventData = DataConverter.convertToIntArray(strEventData);
             m_iHour = iArrltEventData.get(0);
             m_iMin = iArrltEventData.get(1);
             m_iAm_pm = iArrltEventData.get(2);
@@ -130,6 +130,7 @@ public class EventEditor extends AppCompatActivity {
         String strPlaySound = m_chk_sound.isChecked() ? "1" : "0";
 
         KeyValueDB.setEventData(m_context, strEventId, strHour + "," + strMin + "," + strAm_pm + "," + strNotificationType + "," + strPlaySound);
+        KeyValueDB.saveEventId(m_context, m_iEventId);
     }
 
     private void updateDataOnHomePage() {

@@ -69,7 +69,7 @@ public class ClockHomePage extends AppCompatActivity {
         //set stored data
         String strEventData = KeyValueDB.getEventData(m_context, String.valueOf(iEventId));
         if (iEventId != -1 && !strEventData.equals(KeyValueDB.NO_DATA)) {
-            ArrayList<Integer> iArrltEventData = DataConverter.convertEventDataToInt(strEventData);
+            ArrayList<Integer> iArrltEventData = DataConverter.convertToIntArray(strEventData);
             String strHour = String.valueOf(iArrltEventData.get(0));
             String strMin = String.valueOf(iArrltEventData.get(1));
             String strAm_pm = String.valueOf(iArrltEventData.get(2));

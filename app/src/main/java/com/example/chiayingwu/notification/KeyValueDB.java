@@ -3,13 +3,16 @@ package com.example.chiayingwu.notification;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.ArrayList;
+
 /**
  * Created by chiaying.wu on 2017/8/17.
  */
 
 public class KeyValueDB {
     public static String PREF_NAME = "SP";
-    public static String NO_DATA = "no_data";
+    public static String NO_DATA = "NO_DATA";
+    private static String ID_LIST = "ID_LIST";
 
     public KeyValueDB() {
     }
@@ -26,5 +29,34 @@ public class KeyValueDB {
 
     public static String getEventData(Context context, String strKeyName) {
         return getPrefs(context).getString(strKeyName, NO_DATA);
+    }
+
+    public static void saveEventId(Context context, int iEventId) {
+        String strEventIdList = getEventIdList(context);
+        if (!strEventIdList.equals(NO_DATA)) {
+            ArrayList<Integer> iArrEventId = DataConverter.convertToIntArray(strEventIdList);
+            Boolean boolEventExist = checkEventExist(iEventId, iArrEventId);
+            if(!boolEventExist){
+                iArrEventId.add(iEventId);
+                strEventIdList = DataConverter.convertToString(iArrEventId);
+
+                SharedPreferences.Editor editor = getPrefs(context).edit();
+                editor.putString(ID_LIST, strEventIdList);
+                editor.commit();
+            }
+        }
+    }
+
+    public static String getEventIdList(Context context) {
+        return getPrefs(context).getString(ID_LIST, NO_DATA);
+    }
+
+    private static Boolean checkEventExist(int iEventId, ArrayList<Integer> iArrEventId) {
+        for (int i = 0; i < iArrEventId.size(); i++) {
+            if (iEventId == iArrEventId.get(i)) { //if the event has existed
+                return true;
+            }
+        }
+        return false;
     }
 }
