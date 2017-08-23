@@ -30,15 +30,17 @@ public class NotifyService extends Service {
         @Override
         public void handleMessage(Message msg) {
             Log.d("jia", "handleMessage() called");
+            Log.d("jia", "m_iArrScheduledEvent.size(): "+m_iArrScheduledEvent.size());
 
             while (m_iArrScheduledEvent.size() > 0) {
                 synchronized (this) {
                     for (int i = 0; i < m_iArrScheduledEvent.size(); i++) {
                         int iEventCode = m_iArrScheduledEvent.get(i);
                         ArrayList<Integer> iArrStoredEventData = getStoredData(iEventCode);
-                        long scheduledTime = setEndTime(iArrStoredEventData);
-                        if(scheduledTime >= System.currentTimeMillis()){
-                            Log.d("jia", "send a notification");
+                        long scheduledTime = setScheduledTime(iArrStoredEventData);
+                        if (System.currentTimeMillis() >= scheduledTime) {
+                            Log.d("jia", "send a notification, scheduledTime: " + scheduledTime + ", currentTime: " + System.currentTimeMillis());
+                            NotifyUtil.buildSimple(1, R.drawable.ic_launcher, "title", "content", null).show();
                         }
                     }
                     try {
@@ -76,11 +78,14 @@ public class NotifyService extends Service {
         Log.d("jia", "onStartCommand() called");
         Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
 
+        if (intent != null) {
+            getIntentData(intent);
+        }
+
         // For each start request, send a message to start a job and deliver the
         // start ID so we know which request we're stopping when we finish the job
         Message msg = mServiceHandler.obtainMessage();
         msg.arg1 = startId;
-        msg.arg2 = iEventCode;
         mServiceHandler.sendMessage(msg);
 
         // If we get killed, after returning from here, restart
@@ -98,15 +103,6 @@ public class NotifyService extends Service {
         Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
     }
 
-    private Boolean checkEventExist(int iEventCode) {
-        for (int i = 0; i < m_iArrExistentEvent.size(); i++) {
-            if (iEventCode == m_iArrExistentEvent.get(i)) { //if the event has existed
-                return true;
-            }
-        }
-        return false;
-    }
-
     private ArrayList<Integer> getStoredData(int iEventCode) {
         String strEventData = KeyValueDB.getEventData(m_context, String.valueOf(iEventCode));
         ArrayList<Integer> iArrltEventData = null;
@@ -116,7 +112,7 @@ public class NotifyService extends Service {
         return iArrltEventData;
     }
 
-    private long setEndTime(ArrayList<Integer> iArrStoredEventData) {
+    private long setScheduledTime(ArrayList<Integer> iArrStoredEventData) {
         Calendar calendar = Calendar.getInstance();
         int iHour = iArrStoredEventData.get(0);
         int iMin = iArrStoredEventData.get(1);
@@ -128,5 +124,27 @@ public class NotifyService extends Service {
         calendar.set(Calendar.AM_PM, iAm_pm == 0 ? Calendar.AM : Calendar.PM);
 
         return calendar.getTimeInMillis();
+    }
+
+    private void getIntentData(Intent intent) {
+        String strEventAction = intent.getStringExtra(Constants.EVENT_ACTION);
+        ArrayList<Integer> iArrEventCodeAndAction = DataConverter.convertEventDataToInt(strEventAction);
+        int iEventCode = iArrEventCodeAndAction.get(0);
+        int iEventAction = iArrEventCodeAndAction.get(1);
+        if (iEventAction == Constants.EVENT_ADD) {
+            Boolean eventExist = checkEventExist(iEventCode);
+            if (!eventExist) {
+                m_iArrScheduledEvent.add(iEventCode);
+            }
+        }
+    }
+
+    private Boolean checkEventExist(int iEventCode) {
+        for (int i = 0; i < m_iArrScheduledEvent.size(); i++) {
+            if (iEventCode == m_iArrScheduledEvent.get(i)) { //if the event has existed
+                return true;
+            }
+        }
+        return false;
     }
 }
