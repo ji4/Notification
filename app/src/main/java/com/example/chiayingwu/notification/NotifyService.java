@@ -130,7 +130,10 @@ public class NotifyService extends Service {
             int iEventId = m_iArrScheduledEvent.get(i);
             ArrayList<Integer> iArrStoredEventData = getStoredData(iEventId);
             long scheduledTime = setScheduledTime(iArrStoredEventData);
-            if (System.currentTimeMillis() >= scheduledTime) {
+            if (scheduledTime - System.currentTimeMillis() <= 0) { //set at past time
+                KeyValueDB.deleteExpiredEvent(m_context, iEventId);
+                iterator.remove();
+            } else if (System.currentTimeMillis() - scheduledTime >= 0 && System.currentTimeMillis() - scheduledTime <= 1000) {//1s
                 Log.d("jia", "send a notification, scheduledTime: " + scheduledTime + ", currentTime: " + System.currentTimeMillis());
                 NotifyUtil.buildSimple(1, R.drawable.ic_launcher, "title", "content", null).show();
                 KeyValueDB.deleteExpiredEvent(m_context, iEventId);
