@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -19,6 +20,7 @@ public class EventsManager extends AppCompatActivity {
     private static final int EVENT_EDITOR = 0;
     private Context m_context;
     private ArrayList<Button> m_eventButtons;
+    private ArrayList<CheckBox> m_cbxArrltEvent;
     private ArrayList<Integer> m_iArrEventCheckBoxes;
 
     @Override
@@ -28,6 +30,7 @@ public class EventsManager extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 int iEventId = data.getIntExtra(Constants.EVENT_ID, -1);
                 setTimeOnButtonText(iEventId, m_eventButtons.get(iEventId));
+                m_cbxArrltEvent.get(iEventId).setChecked(true);
             }
         }
     }
@@ -60,15 +63,18 @@ public class EventsManager extends AppCompatActivity {
 
     CompoundButton.OnCheckedChangeListener checkBoxListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
-        public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {//b: isChecked
+        public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
             int iEventCheckBoxesSize = m_iArrEventCheckBoxes.size();
             for (int i = 0; i < iEventCheckBoxesSize; i++) {
                 if (compoundButton.getId() == m_iArrEventCheckBoxes.get(i)) {
-                    if(isChecked){
+                    if (isChecked) {
                         Toast.makeText(m_context, "checked", Toast.LENGTH_SHORT).show();
-                    }
-                    else{
+                        KeyValueDB.saveEventId(m_context, i);
+                        startNotifyService();
+                    } else {
                         Toast.makeText(m_context, "unchecked", Toast.LENGTH_SHORT).show();
+                        KeyValueDB.deleteExpiredEvent(m_context, i);
+                        startNotifyService();
                     }
                 }
             }
@@ -100,15 +106,22 @@ public class EventsManager extends AppCompatActivity {
         }
     }
 
+    private void startNotifyService() {
+        Intent serviceIntent = new Intent(EventsManager.this, NotifyService.class);
+        startService(serviceIntent);
+    }
 
     private void findViews() {
         m_btn_time = (Button) findViewById(R.id.activity_events_manager_btn_time);
         m_eventButtons = new ArrayList<>(Arrays.asList(m_btn_time));
 
         m_checkBox = (CheckBox) findViewById(R.id.activity_events_manager_checkBox);
+        m_cbxArrltEvent = new ArrayList<>(Arrays.asList(
+                m_checkBox
+        ));
         m_iArrEventCheckBoxes = new ArrayList<>(Arrays.asList(
                 R.id.activity_events_manager_checkBox
-                ));
+        ));
     }
 
     private void setButtonListener() {
