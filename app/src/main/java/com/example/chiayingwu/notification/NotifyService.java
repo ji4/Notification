@@ -134,6 +134,7 @@ public class NotifyService extends Service {
             if (System.currentTimeMillis() - scheduledTime >= 0 && System.currentTimeMillis() - scheduledTime <= 1000) {//1s
                 Log.d("jia", "send a notification, scheduledTime: " + scheduledTime + ", currentTime: " + System.currentTimeMillis());
                 NotifyUtil.buildSimple(1, R.drawable.ic_launcher, "title", "content", null).show();
+//                NotifyUtil.build(NotifyUtil.BUILD_BIG_PIC, 1, R.drawable.ic_launcher, "123", "456").show();
                 KeyValueDB.deleteExpiredEvent(m_context, iEventId);
                 iterator.remove();
             } else if (scheduledTime - System.currentTimeMillis() <= 0) { //set at past time

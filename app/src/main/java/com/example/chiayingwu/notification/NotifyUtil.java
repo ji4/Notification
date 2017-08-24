@@ -20,12 +20,25 @@ import com.example.chiayingwu.notification.builder.SingleLineBuilder;
 public class NotifyUtil {
     public static Context g_context;
 
+    public static final int BUILD_SIMPLE = 0;
+    public static final int BUILD_BIG_TEXT = 1;
+    public static final int BUILD_INBOX = 2;
+    public static final int BUILD_BIG_PIC = 3;
+    public static final int BUILD_PROCESS = 4;
+
+
     private static NotificationManager m_notificationManager;
 
     public static void init(Context context) {
         g_context = context;
         m_notificationManager = (NotificationManager) context.getSystemService(Activity.NOTIFICATION_SERVICE);
     }
+
+//    public static BaseBuilder build(int iBuildType, int id, int smallIcon, CharSequence contentTitle, CharSequence contentText) {
+//        BaseBuilder builder = new BaseBuilder();
+//        builder.setBase(smallIcon, contentTitle, contentText).setId(id);
+//        return builder;
+//    }
 
 
     public static SingleLineBuilder buildSimple(int id, int smallIcon, CharSequence contentTitle, CharSequence contentText, PendingIntent contentIntent) {
