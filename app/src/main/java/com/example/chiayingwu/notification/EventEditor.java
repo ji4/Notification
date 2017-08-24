@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -20,11 +21,12 @@ public class EventEditor extends AppCompatActivity {
     private NumberPicker m_numPicker_hour, m_numPicker_min, m_numPicker_am_pm;
     private RadioGroup m_radioGroup;
     private CheckBox m_chk_sound;
+    private CheckBox m_chk_countdown;
     private ArrayList<Integer> m_iArryltNotificationRadioBtn;
     private Button m_btn_confirm;
     //values
     private int m_iEventId;
-    private int m_iHour, m_iMin, m_iAm_pm, m_iNotification, m_iSound;
+    private int m_iHour, m_iMin, m_iAm_pm, m_iNotification, m_iSound, m_iCountdown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,17 @@ public class EventEditor extends AppCompatActivity {
         init();
         getIntentData();
         setStoredData();
+
+        m_chk_countdown.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked) {
+                    switchToCountdownNumPicker();
+                } else {
+                    switchToTimeNumPicker();
+                }
+            }
+        });
 
         m_btn_confirm.setOnClickListener(new Button.OnClickListener() {
             @Override
@@ -46,27 +59,27 @@ public class EventEditor extends AppCompatActivity {
         });
     }
 
+    public void onNotificationTypeRadioBtnClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        int iNotificationRadioBtnSize = m_iArryltNotificationRadioBtn.size();
+        for (int i = 0; i < iNotificationRadioBtnSize; i++) {
+            if (view.getId() == m_iArryltNotificationRadioBtn.get(i)) {
+                if (checked) {
+                    m_iNotification = i;
+                    break;
+                }
+            }
+        }
+    }
+
     private void init() {
         /*shared prefrences*/
         m_context = this;
         KeyValueDB.getPrefs(m_context);
 
-        /*mumber pickers*/
-        //hour
-        m_numPicker_hour.setMinValue(1);
-        m_numPicker_hour.setMaxValue(12);
-        m_numPicker_hour.setValue(1);
-
-        //minute
-        m_numPicker_min.setMinValue(0);
-        m_numPicker_min.setMaxValue(59);
-        m_numPicker_min.setValue(1);
-
-        //AM/PM
-        m_numPicker_am_pm.setMinValue(0);
-        m_numPicker_am_pm.setMaxValue(1);
-        m_numPicker_am_pm.setDisplayedValues(new String[]{"AM", "PM"});
-        m_numPicker_am_pm.setValue(1);
+        switchToTimeNumPicker();
 
         /*notification radio button*/
         m_radioGroup.check(m_iArryltNotificationRadioBtn.get(0));
@@ -89,6 +102,7 @@ public class EventEditor extends AppCompatActivity {
             m_iAm_pm = iArrltEventData.get(2);
             m_iNotification = iArrltEventData.get(3);
             m_iSound = iArrltEventData.get(4);
+            m_iCountdown = iArrltEventData.get(5);
 
             m_numPicker_hour.setValue(m_iHour);
             m_numPicker_min.setValue(m_iMin);
@@ -99,20 +113,11 @@ public class EventEditor extends AppCompatActivity {
             } else {//0
                 m_chk_sound.setChecked(false);
             }
-        }
-    }
-
-    public void onNotificationTypeRadioBtnClicked(View view) {
-        // Is the button now checked?
-        boolean checked = ((RadioButton) view).isChecked();
-
-        int iNotificationRadioBtnSize = m_iArryltNotificationRadioBtn.size();
-        for (int i = 0; i < iNotificationRadioBtnSize; i++) {
-            if (view.getId() == m_iArryltNotificationRadioBtn.get(i)) {
-                if (checked) {
-                    m_iNotification = i;
-                    break;
-                }
+            
+            if (m_iCountdown == 1) {
+                m_chk_countdown.setChecked(true);
+            } else { //0
+                m_chk_countdown.setChecked(false);
             }
         }
     }
@@ -120,6 +125,10 @@ public class EventEditor extends AppCompatActivity {
     private void saveEventData() {
         //event code
         String strEventId = String.valueOf(m_iEventId);
+        //
+        Boolean isCountDownChecked = m_chk_countdown.isChecked();
+        String strCountDownChecked = isCountDownChecked ? "1" : "0";
+
         //event time
         String strHour = String.valueOf(m_numPicker_hour.getValue());
         String strMin = String.valueOf(m_numPicker_min.getValue());
@@ -129,8 +138,46 @@ public class EventEditor extends AppCompatActivity {
         //event sound effect
         String strPlaySound = m_chk_sound.isChecked() ? "1" : "0";
 
-        KeyValueDB.setEventData(m_context, strEventId, strHour + "," + strMin + "," + strAm_pm + "," + strNotificationType + "," + strPlaySound);
+        KeyValueDB.setEventData(m_context, strEventId, strHour + "," + strMin + "," + strAm_pm + "," + strNotificationType + "," + strPlaySound + "," + strCountDownChecked);
         KeyValueDB.saveEventId(m_context, m_iEventId);
+    }
+
+    private void switchToCountdownNumPicker() {
+        /*mumber pickers*/
+        //hour
+        m_numPicker_hour.setMinValue(0);
+        m_numPicker_hour.setMaxValue(12);
+        m_numPicker_hour.setValue(0);
+
+        //minute
+        m_numPicker_min.setMinValue(0);
+        m_numPicker_min.setMaxValue(59);
+        m_numPicker_min.setValue(0);
+
+        //AM/PM
+        m_numPicker_am_pm.setDisplayedValues(null);
+        m_numPicker_am_pm.setMinValue(0);
+        m_numPicker_am_pm.setMaxValue(59);
+        m_numPicker_am_pm.setValue(3);
+    }
+
+    private void switchToTimeNumPicker() {
+        /*mumber pickers*/
+        //hour
+        m_numPicker_hour.setMinValue(1);
+        m_numPicker_hour.setMaxValue(12);
+        m_numPicker_hour.setValue(1);
+
+        //minute
+        m_numPicker_min.setMinValue(0);
+        m_numPicker_min.setMaxValue(59);
+        m_numPicker_min.setValue(1);
+
+        //AM/PM
+        m_numPicker_am_pm.setMinValue(0);
+        m_numPicker_am_pm.setMaxValue(1);
+        m_numPicker_am_pm.setDisplayedValues(new String[]{"AM", "PM"});
+        m_numPicker_am_pm.setValue(1);
     }
 
     private void updateDataOnHomePage() {
@@ -145,6 +192,7 @@ public class EventEditor extends AppCompatActivity {
     }
 
     private void findViews() {
+        m_chk_countdown = (CheckBox) findViewById(R.id.activity_event_editor_chk_countdown);
         m_numPicker_hour = (NumberPicker) findViewById(R.id.activity_event_editor_numberPicker_hour);
         m_numPicker_min = (NumberPicker) findViewById(R.id.activity_event_editor_numberPicker_min);
         m_numPicker_am_pm = (NumberPicker) findViewById(R.id.activity_event_editor_numberPicker_am_pm);
