@@ -74,6 +74,7 @@ public class NotifyService extends Service {
         //get all event id from shared pref
         String strEventIdList = KeyValueDB.getEventIdList(m_context);
         m_iArrScheduledEvent = DataConverter.convertToIntArray(strEventIdList);
+        Log.d("jia", "m_iArrScheduledEvent.size() in onStartCommand: " + m_iArrScheduledEvent.size());
 
         // For each start request, send a message to start a job and deliver the
         // start ID so we know which request we're stopping when we finish the job
