@@ -25,10 +25,10 @@ public class BaseBuilder {
     //basic notification manager
     private int id;
     private PendingIntent contentIntent;
+    protected Notification.Builder builder;
 
     /*Button Action*/
     private List<BtnActionBean> listBtnActionBeans;
-
     public BaseBuilder addBtn(int icon, CharSequence text, PendingIntent pendingIntent) {
         if (listBtnActionBeans == null) {
             listBtnActionBeans = new ArrayList<>();
@@ -41,27 +41,12 @@ public class BaseBuilder {
         return this;
     }
 
-    class BtnActionBean {
-        private int icon;
-        private CharSequence text;
-        private PendingIntent pendingIntent;
-
-        BtnActionBean(int icon, CharSequence text, PendingIntent pendingIntent) {
-            this.icon = icon;
-            this.text = text;
-            this.pendingIntent = pendingIntent;
-        }
-    }
-    /*End of Button Action*/
-
+    /*Sound*/
     private Uri soundUri;
-
     public BaseBuilder playSound() {
         soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION); // use system's built-in sound effect
         return this;
     }
-
-    protected Notification.Builder builder;
 
     public BaseBuilder setBase(int smallIcon, CharSequence contentTitle, CharSequence contentText) {
         this.smallIcon = smallIcon;
@@ -112,5 +97,16 @@ public class BaseBuilder {
         setupNotificationBuilder();
         Notification notification = builder.build(); //build a notification
         NotifyUtil.notify(id, notification);
+    }
+}
+class BtnActionBean {
+    int icon;
+    CharSequence text;
+    PendingIntent pendingIntent;
+
+    BtnActionBean(int icon, CharSequence text, PendingIntent pendingIntent) {
+        this.icon = icon;
+        this.text = text;
+        this.pendingIntent = pendingIntent;
     }
 }
