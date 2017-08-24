@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,11 +68,9 @@ public class EventsManager extends AppCompatActivity {
             for (int i = 0; i < iEventCheckBoxSize; i++) {
                 if (compoundButton.getId() == m_iArrEventCheckBoxRId.get(i)) {
                     if (isChecked) {
-                        Toast.makeText(m_context, "checked", Toast.LENGTH_SHORT).show();
                         KeyValueDB.saveEventId(m_context, i);
                         startNotifyService();
                     } else {
-                        Toast.makeText(m_context, "unchecked", Toast.LENGTH_SHORT).show();
                         KeyValueDB.deleteExpiredEvent(m_context, i);
                         startNotifyService();
                     }
@@ -102,7 +99,7 @@ public class EventsManager extends AppCompatActivity {
             ArrayList<Integer> iArrltEventData = DataConverter.convertToIntArray(strEventData);
             String strHour = String.valueOf(iArrltEventData.get(0));
             String strMin = String.valueOf(iArrltEventData.get(1));
-            String strAm_pm = String.valueOf(iArrltEventData.get(2));
+            String strAm_pm = String.valueOf(iArrltEventData.get(3));
             eventButton.setText(strHour + " : " + strMin + " " + (strAm_pm == "0" ? "AM" : "PM"));
         }
     }

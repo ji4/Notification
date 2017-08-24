@@ -14,6 +14,7 @@ import android.widget.RadioGroup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 
 public class EventEditor extends AppCompatActivity {
     private Context m_context;
@@ -113,32 +114,50 @@ public class EventEditor extends AppCompatActivity {
             } else {//0
                 m_chk_sound.setChecked(false);
             }
-            
-            if (m_iCountdown == 1) {
-                m_chk_countdown.setChecked(true);
-            } else { //0
-                m_chk_countdown.setChecked(false);
-            }
+
+//            if (m_iCountdown == 1) {
+//                m_chk_countdown.setChecked(true);
+//            } else { //0
+//                m_chk_countdown.setChecked(false);
+//            }
         }
     }
 
     private void saveEventData() {
         //event code
         String strEventId = String.valueOf(m_iEventId);
-        //
-        Boolean isCountDownChecked = m_chk_countdown.isChecked();
-        String strCountDownChecked = isCountDownChecked ? "1" : "0";
-
         //event time
-        String strHour = String.valueOf(m_numPicker_hour.getValue());
-        String strMin = String.valueOf(m_numPicker_min.getValue());
-        String strAm_pm = String.valueOf(m_numPicker_am_pm.getValue());
+        int iHour = m_numPicker_hour.getValue();
+        int iMin = m_numPicker_min.getValue();
+        int iAm_pm = m_numPicker_am_pm.getValue();
+        String strHour = String.valueOf(iHour);
+        String strMin = String.valueOf(iMin);
+        String strAm_pm = String.valueOf(iAm_pm);
         //event notification type
         String strNotificationType = String.valueOf(m_iNotification);
         //event sound effect
         String strPlaySound = m_chk_sound.isChecked() ? "1" : "0";
+        //event numPicker time/countdown
+        Boolean isCountDownChecked = m_chk_countdown.isChecked();
+        String strCountDownChecked = isCountDownChecked ? "1" : "0";
 
-        KeyValueDB.setEventData(m_context, strEventId, strHour + "," + strMin + "," + strAm_pm + "," + strNotificationType + "," + strPlaySound + "," + strCountDownChecked);
+        Calendar curCalendar = Calendar.getInstance();
+        Calendar scheduledCalendar = (Calendar) curCalendar.clone();
+        String strSec = "0";
+        int iSec;
+        if (isCountDownChecked) {
+            iSec = iAm_pm;
+            scheduledCalendar.add(Calendar.HOUR, iHour);
+            scheduledCalendar.add(Calendar.MINUTE, iMin);
+            scheduledCalendar.add(Calendar.SECOND, iSec);
+
+            strHour = String.valueOf(scheduledCalendar.get(Calendar.HOUR));
+            strMin = String.valueOf(scheduledCalendar.get(Calendar.MINUTE));
+            strSec = String.valueOf(scheduledCalendar.get(Calendar.SECOND));
+            strAm_pm = String.valueOf(scheduledCalendar.get(Calendar.AM_PM));
+        }
+
+        KeyValueDB.setEventData(m_context, strEventId, strHour + "," + strMin + "," + strSec + "," + strAm_pm + "," + strNotificationType + "," + strPlaySound + "," + strCountDownChecked);
         KeyValueDB.saveEventId(m_context, m_iEventId);
     }
 

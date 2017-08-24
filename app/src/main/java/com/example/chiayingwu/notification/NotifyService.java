@@ -110,11 +110,12 @@ public class NotifyService extends Service {
         Calendar calendar = Calendar.getInstance();
         int iHour = iArrStoredEventData.get(0);
         int iMin = iArrStoredEventData.get(1);
-        int iAm_pm = iArrStoredEventData.get(2);
+        int iSec = iArrStoredEventData.get(2);
+        int iAm_pm = iArrStoredEventData.get(3);
 
         calendar.set(Calendar.HOUR, iHour);
         calendar.set(Calendar.MINUTE, iMin);
-        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.SECOND, iSec);
         calendar.set(Calendar.MILLISECOND, 0);
         calendar.set(Calendar.AM_PM, iAm_pm == 0 ? Calendar.AM : Calendar.PM);
 
@@ -130,15 +131,14 @@ public class NotifyService extends Service {
             int iEventId = m_iArrScheduledEvent.get(i);
             ArrayList<Integer> iArrStoredEventData = getStoredData(iEventId);
             long scheduledTime = setScheduledTime(iArrStoredEventData);
-            if (scheduledTime - System.currentTimeMillis() <= 0) { //set at past time
-                KeyValueDB.deleteExpiredEvent(m_context, iEventId);
-                iterator.remove();
-            } else if (System.currentTimeMillis() - scheduledTime >= 0 && System.currentTimeMillis() - scheduledTime <= 1000) {//1s
+            if (System.currentTimeMillis() - scheduledTime >= 0 && System.currentTimeMillis() - scheduledTime <= 1000) {//1s
                 Log.d("jia", "send a notification, scheduledTime: " + scheduledTime + ", currentTime: " + System.currentTimeMillis());
                 NotifyUtil.buildSimple(1, R.drawable.ic_launcher, "title", "content", null).show();
                 KeyValueDB.deleteExpiredEvent(m_context, iEventId);
                 iterator.remove();
-            }
+            }else  if (scheduledTime - System.currentTimeMillis() <= 0) { //set at past time
+                KeyValueDB.deleteExpiredEvent(m_context, iEventId);
+           }
         }
     }
 }
