@@ -136,9 +136,10 @@ public class NotifyService extends Service {
                 NotifyUtil.buildSimple(1, R.drawable.ic_launcher, "title", "content", null).show();
                 KeyValueDB.deleteExpiredEvent(m_context, iEventId);
                 iterator.remove();
-            }else  if (scheduledTime - System.currentTimeMillis() <= 0) { //set at past time
+            } else if (scheduledTime - System.currentTimeMillis() <= 0) { //set at past time
                 KeyValueDB.deleteExpiredEvent(m_context, iEventId);
-           }
+                iterator.remove();
+            }
         }
     }
 }
