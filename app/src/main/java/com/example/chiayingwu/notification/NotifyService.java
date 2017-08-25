@@ -21,6 +21,7 @@ public class NotifyService extends Service {
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;
     private ArrayList<Integer> m_iArrScheduledEvent = new ArrayList<>(); //stores Event Id
+    private long m_startTimeMillis;
 
     // Handler that receives messages from the thread
     private final class ServiceHandler extends Handler {
@@ -71,6 +72,8 @@ public class NotifyService extends Service {
         Log.d("jia", "onStartCommand() called");
         Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
 
+        m_startTimeMillis = System.currentTimeMillis();
+
         if (intent != null) {
             addEventIfReminderActionSet(intent);
         }
@@ -112,7 +115,13 @@ public class NotifyService extends Service {
             long scheduledTime = setScheduledTime(iArrStoredEventData);
             int iNotifyType = iArrStoredEventData.get(4);
 
-            if (System.currentTimeMillis() - scheduledTime >= 0 && System.currentTimeMillis() - scheduledTime <= 1000) {//1s
+            if (iNotifyType == NotifyUtil.BUILD_PROCESS) {
+                NotifyUtil.buildTimeProcess(5, R.drawable.ic_launcher, "Downloading", m_startTimeMillis, scheduledTime).show();
+                if (scheduledTime - System.currentTimeMillis() <= 0) {
+                    KeyValueDB.deleteEvent(m_context, iEventId);
+                    iterator.remove();
+                }
+            } else if (System.currentTimeMillis() - scheduledTime >= 0 && System.currentTimeMillis() - scheduledTime <= 1000) {//1000=1s
                 Log.d("jia", "send a notification, scheduledTime: " + scheduledTime + ", currentTime: " + System.currentTimeMillis());
                 Notify.notify(iNotifyType, iEventId);
 
@@ -150,7 +159,7 @@ public class NotifyService extends Service {
         return calendar.getTimeInMillis();
     }
 
-    private void addEventIfReminderActionSet(Intent intent){
+    private void addEventIfReminderActionSet(Intent intent) {
         int iEventId = intent.getIntExtra(Constants.KEY_REMIND_LATER, -1);
         if (iEventId != -1) {
             Calendar currentCalendar = Calendar.getInstance();
