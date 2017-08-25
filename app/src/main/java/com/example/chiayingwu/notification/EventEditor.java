@@ -224,6 +224,8 @@ public class EventEditor extends AppCompatActivity {
                 R.id.activity_event_editor_rb_bigText,
                 R.id.activity_event_editor_rb_inbox,
                 R.id.activity_event_editor_rb_bigPicture,
-                R.id.activity_event_editor_rb_progress));
+                R.id.activity_event_editor_rb_progress,
+                R.id.activity_event_editor_rb_action
+        ));
     }
 }

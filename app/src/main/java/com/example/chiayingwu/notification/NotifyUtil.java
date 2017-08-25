@@ -22,6 +22,13 @@ public class NotifyUtil {
 
     private static NotificationManager m_notificationManager;
 
+    public static final int BUILD_SIMPLE = 0;
+    public static final int BUILD_BIG_TEXT = 1;
+    public static final int BUILD_INBOX = 2;
+    public static final int BUILD_BIG_PIC = 3;
+    public static final int BUILD_PROCESS = 4;
+    public static final int BUILD_ACTION = 5;
+
     public static void init(Context context) {
         g_context = context;
         m_notificationManager = (NotificationManager) context.getSystemService(Activity.NOTIFICATION_SERVICE);
@@ -70,6 +77,15 @@ public class NotifyUtil {
         Intent intent = new Intent(NotifyUtil.g_context, _class); //get intent of current Activity
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pi = PendingIntent.getActivity(NotifyUtil.g_context, 0, intent, iFlags); //get pending intent
+        return pi;
+    }
+
+    public static PendingIntent buildService(Class _class, int iEventId){
+        int iFlags = PendingIntent.FLAG_UPDATE_CURRENT;
+        Intent intent = new Intent(NotifyUtil.g_context, _class); //get intent of current Activity
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(Constants.KEY_REMIND_LATER, iEventId);
+        PendingIntent pi = PendingIntent.getService(g_context, 1, intent, iFlags); //get pending service
         return pi;
     }
 
