@@ -4,7 +4,7 @@ package com.example.chiayingwu.notification;
  * Created by chiaying.wu on 2017/8/25.
  */
 
-public class Notify {
+public class NotifyBuilderInstances {
     public static void notify(int iBuildType, int iEventId) {
         switch (iBuildType) {
             case NotifyUtil.BUILD_SIMPLE:

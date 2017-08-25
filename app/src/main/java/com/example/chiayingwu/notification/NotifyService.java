@@ -124,7 +124,7 @@ public class NotifyService extends Service {
                 }
             } else if (System.currentTimeMillis() - scheduledTime >= 0 && System.currentTimeMillis() - scheduledTime <= 1000) {//1000=1s
                 Log.d("jia", "send a notification, scheduledTime: " + scheduledTime + ", currentTime: " + System.currentTimeMillis());
-                Notify.notify(iNotifyType, iEventId);
+                NotifyBuilderInstances.notify(iNotifyType, iEventId);
 
                 KeyValueDB.deleteEvent(m_context, iEventId);
                 iterator.remove();
