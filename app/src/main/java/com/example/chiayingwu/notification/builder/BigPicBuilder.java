@@ -13,10 +13,10 @@ import com.example.chiayingwu.notification.NotifyUtil;
 
 public class BigPicBuilder extends BaseBuilder {
     private Bitmap bitmap;
-    @DrawableRes private int bigPicture;
+    @DrawableRes private int iBigPicture;
 
-    public BigPicBuilder setPicture(@DrawableRes int drawable) {
-        this.bigPicture = drawable;
+    public BigPicBuilder setPicture(@DrawableRes int iDrawable) {
+        this.iBigPicture = iDrawable;
         return this;
     }
 
@@ -25,11 +25,11 @@ public class BigPicBuilder extends BaseBuilder {
         super.setupNotificationBuilder();
         Notification.BigPictureStyle bigPictureStyle = new Notification.BigPictureStyle();
         if (bitmap == null || bitmap.isRecycled()) {
-            if (bigPicture > 0) {
+            if (iBigPicture > 0) {
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inScaled = true;
                 options.inSampleSize = 2;
-                bitmap = BitmapFactory.decodeResource(NotifyUtil.g_context.getResources(), bigPicture, options);
+                bitmap = BitmapFactory.decodeResource(NotifyUtil.g_context.getResources(), iBigPicture, options);
             }
         }
         bigPictureStyle.bigPicture(bitmap).setBigContentTitle(contentTitle).setSummaryText(summaryText);

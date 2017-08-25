@@ -27,7 +27,7 @@ public class EventEditor extends AppCompatActivity {
     private Button m_btn_confirm;
     //values
     private int m_iEventId;
-    private int m_iHour, m_iMin, m_iAm_pm, m_iNotification, m_iSound, m_iCountdown;
+    private int m_iHour, m_iMin, m_iSec, m_iAm_pm, m_iNotification, m_iSound, m_iCountdown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,10 +100,11 @@ public class EventEditor extends AppCompatActivity {
             ArrayList<Integer> iArrltEventData = DataConverter.convertToIntArray(strEventData);
             m_iHour = iArrltEventData.get(0);
             m_iMin = iArrltEventData.get(1);
-            m_iAm_pm = iArrltEventData.get(2);
-            m_iNotification = iArrltEventData.get(3);
-            m_iSound = iArrltEventData.get(4);
-            m_iCountdown = iArrltEventData.get(5);
+            m_iSec = iArrltEventData.get(2);
+            m_iAm_pm = iArrltEventData.get(3);
+            m_iNotification = iArrltEventData.get(4);
+            m_iSound = iArrltEventData.get(5);
+            m_iCountdown = iArrltEventData.get(6);
 
             m_numPicker_hour.setValue(m_iHour);
             m_numPicker_min.setValue(m_iMin);
@@ -224,6 +225,8 @@ public class EventEditor extends AppCompatActivity {
                 R.id.activity_event_editor_rb_bigText,
                 R.id.activity_event_editor_rb_inbox,
                 R.id.activity_event_editor_rb_bigPicture,
-                R.id.activity_event_editor_rb_progress));
+                R.id.activity_event_editor_rb_progress,
+                R.id.activity_event_editor_rb_action
+        ));
     }
 }

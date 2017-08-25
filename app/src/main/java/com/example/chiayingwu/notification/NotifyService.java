@@ -21,6 +21,8 @@ public class NotifyService extends Service {
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;
     private ArrayList<Integer> m_iArrScheduledEvent = new ArrayList<>(); //stores Event Id
+    private long m_startTimeMillis;
+    private int iProcessNotifyId = 5;
 
     // Handler that receives messages from the thread
     private final class ServiceHandler extends Handler {
@@ -37,7 +39,7 @@ public class NotifyService extends Service {
                 synchronized (this) {
                     checkScheduledEventsMatch();
                     try {
-                        wait(1000);
+                        wait(1000); //1s
                     } catch (Exception e) {
                     }
                 }
@@ -71,6 +73,12 @@ public class NotifyService extends Service {
         Log.d("jia", "onStartCommand() called");
         Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
 
+        m_startTimeMillis = System.currentTimeMillis();
+
+        if (intent != null) {
+            addEventIfReminderActionSet(intent);
+        }
+
         //get all event id from shared pref
         String strEventIdList = KeyValueDB.getEventIdList(m_context);
         m_iArrScheduledEvent = DataConverter.convertToIntArray(strEventIdList);
@@ -95,6 +103,36 @@ public class NotifyService extends Service {
     @Override
     public void onDestroy() {
         Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
+    }
+
+    private void checkScheduledEventsMatch() {
+        //check if current time matches scheduled time
+        for (ListIterator<Integer> iterator = m_iArrScheduledEvent.listIterator(); iterator.hasNext(); ) {
+            int i = iterator.nextIndex();
+            iterator.next();
+
+            int iEventId = m_iArrScheduledEvent.get(i);
+            ArrayList<Integer> iArrStoredEventData = getStoredData(iEventId);
+            long scheduledTime = setScheduledTime(iArrStoredEventData);
+            int iNotifyType = iArrStoredEventData.get(4);
+
+            if (iNotifyType == NotifyUtil.BUILD_PROCESS) {
+                NotifyUtil.buildTimeProcess(iProcessNotifyId, R.drawable.ic_launcher, "Downloading", m_startTimeMillis, scheduledTime).show();
+                if (scheduledTime - System.currentTimeMillis() <= 0) {
+                    KeyValueDB.deleteEvent(m_context, iEventId);
+                    iterator.remove();
+                }
+            } else if (System.currentTimeMillis() - scheduledTime >= 0 && System.currentTimeMillis() - scheduledTime <= 1000) {//1000=1s
+                Log.d("jia", "send a notification, scheduledTime: " + scheduledTime + ", currentTime: " + System.currentTimeMillis());
+                NotifyBuilderInstances.notify(iNotifyType, iEventId);
+
+                KeyValueDB.deleteEvent(m_context, iEventId);
+                iterator.remove();
+            } else if (scheduledTime - System.currentTimeMillis() <= 0) { //set at past time or expired
+                KeyValueDB.deleteEvent(m_context, iEventId);
+                iterator.remove();
+            }
+        }
     }
 
     private ArrayList<Integer> getStoredData(int iEventId) {
@@ -122,25 +160,26 @@ public class NotifyService extends Service {
         return calendar.getTimeInMillis();
     }
 
-    private void checkScheduledEventsMatch() {
-        //check if current time matches scheduled time
-        for (ListIterator<Integer> iterator = m_iArrScheduledEvent.listIterator(); iterator.hasNext(); ) {
-            int i = iterator.nextIndex();
-            iterator.next();
 
-            int iEventId = m_iArrScheduledEvent.get(i);
-            ArrayList<Integer> iArrStoredEventData = getStoredData(iEventId);
-            long scheduledTime = setScheduledTime(iArrStoredEventData);
-            if (System.currentTimeMillis() - scheduledTime >= 0 && System.currentTimeMillis() - scheduledTime <= 1000) {//1s
-                Log.d("jia", "send a notification, scheduledTime: " + scheduledTime + ", currentTime: " + System.currentTimeMillis());
-                NotifyUtil.buildSimple(1, R.drawable.ic_launcher, "title", "content", null).show();
-//                NotifyUtil.build(NotifyUtil.BUILD_BIG_PIC, 1, R.drawable.ic_launcher, "123", "456").show();
-                KeyValueDB.deleteExpiredEvent(m_context, iEventId);
-                iterator.remove();
-            } else if (scheduledTime - System.currentTimeMillis() <= 0) { //set at past time
-                KeyValueDB.deleteExpiredEvent(m_context, iEventId);
-                iterator.remove();
-            }
+    private void addEventIfReminderActionSet(Intent intent) {
+        int iEventId = intent.getIntExtra(Constants.KEY_REMIND_LATER, -1);
+        if (iEventId != -1) {
+            NotifyUtil.cancel(6);
+
+            Calendar currentCalendar = Calendar.getInstance();
+            Calendar scheduledCalendar = (Calendar) currentCalendar.clone();
+            int iSec = 5;
+            scheduledCalendar.add(Calendar.SECOND, iSec);
+
+            String strEventId = String.valueOf(iEventId);
+            String strHour = String.valueOf(scheduledCalendar.get(Calendar.HOUR));
+            String strMin = String.valueOf(scheduledCalendar.get(Calendar.MINUTE));
+            String strSec = String.valueOf(scheduledCalendar.get(Calendar.SECOND));
+            String strAm_pm = String.valueOf(scheduledCalendar.get(Calendar.AM_PM));
+            String strPlaySound = "0";
+            String strCountDownChecked = "0";
+            KeyValueDB.setEventData(m_context, strEventId, strHour + "," + strMin + "," + strSec + "," + strAm_pm + "," + NotifyUtil.BUILD_ACTION + "," + strPlaySound + "," + strCountDownChecked);
+            KeyValueDB.saveEventId(m_context, iEventId);
         }
     }
 }

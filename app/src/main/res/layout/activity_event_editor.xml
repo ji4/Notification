@@ -58,7 +58,7 @@
             <RadioGroup
                 android:id="@+id/activity_event_editor_radioGroup"
                 android:layout_width="match_parent"
-                android:layout_height="174dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="0.65">
 
                 <RadioButton
@@ -95,6 +95,13 @@
                     android:layout_height="wrap_content"
                     android:onClick="onNotificationTypeRadioBtnClicked"
                     android:text="Progress" />
+
+                <RadioButton
+                    android:id="@+id/activity_event_editor_rb_action"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="onNotificationTypeRadioBtnClicked"
+                    android:text="Action Btn" />
 
             </RadioGroup>
         </LinearLayout>
