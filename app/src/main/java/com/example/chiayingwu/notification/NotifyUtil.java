@@ -21,14 +21,6 @@ import java.text.SimpleDateFormat;
 
 public class NotifyUtil {
     public static Context g_context;
-
-    public static final int BUILD_SIMPLE = 0;
-    public static final int BUILD_BIG_TEXT = 1;
-    public static final int BUILD_INBOX = 2;
-    public static final int BUILD_BIG_PIC = 3;
-    public static final int BUILD_PROCESS = 4;
-
-
     private static NotificationManager m_notificationManager;
 
     public static final int BUILD_SIMPLE = 0;
@@ -120,8 +112,8 @@ public class NotifyUtil {
         }
     }
 
-    public static void cancelAll(){
-        if(m_notificationManager!=null){
+    public static void cancelAll() {
+        if (m_notificationManager != null) {
             m_notificationManager.cancelAll();
         }
     }
