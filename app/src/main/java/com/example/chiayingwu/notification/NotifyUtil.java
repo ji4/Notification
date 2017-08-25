@@ -80,8 +80,8 @@ public class NotifyUtil {
         return builder;
     }
 
-    public static void notify(int iNotifyId, Notification notification) {
-        m_notificationManager.notify(iNotifyId, notification);
+    public static void notify(int id, Notification notification) {
+        m_notificationManager.notify(id, notification);
     }
 
     public static PendingIntent buildIntent(Class _class) {
@@ -99,6 +99,18 @@ public class NotifyUtil {
         intent.putExtra(Constants.KEY_REMIND_LATER, iEventId);
         PendingIntent pi = PendingIntent.getService(g_context, 1, intent, iFlags); //get pending service
         return pi;
+    }
+
+    public static void cancel(int id) {
+        if (m_notificationManager != null) {
+            m_notificationManager.cancel(id);
+        }
+    }
+
+    public static void cancelAll(){
+        if(m_notificationManager!=null){
+            m_notificationManager.cancelAll();
+        }
     }
 
 

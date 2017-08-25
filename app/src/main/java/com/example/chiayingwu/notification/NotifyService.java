@@ -22,6 +22,7 @@ public class NotifyService extends Service {
     private ServiceHandler mServiceHandler;
     private ArrayList<Integer> m_iArrScheduledEvent = new ArrayList<>(); //stores Event Id
     private long m_startTimeMillis;
+    private int iProcessNotifyId = 5;
 
     // Handler that receives messages from the thread
     private final class ServiceHandler extends Handler {
@@ -116,7 +117,7 @@ public class NotifyService extends Service {
             int iNotifyType = iArrStoredEventData.get(4);
 
             if (iNotifyType == NotifyUtil.BUILD_PROCESS) {
-                NotifyUtil.buildTimeProcess(5, R.drawable.ic_launcher, "Downloading", m_startTimeMillis, scheduledTime).show();
+                NotifyUtil.buildTimeProcess(iProcessNotifyId, R.drawable.ic_launcher, "Downloading", m_startTimeMillis, scheduledTime).show();
                 if (scheduledTime - System.currentTimeMillis() <= 0) {
                     KeyValueDB.deleteEvent(m_context, iEventId);
                     iterator.remove();
@@ -162,6 +163,8 @@ public class NotifyService extends Service {
     private void addEventIfReminderActionSet(Intent intent) {
         int iEventId = intent.getIntExtra(Constants.KEY_REMIND_LATER, -1);
         if (iEventId != -1) {
+            NotifyUtil.cancel(6);
+
             Calendar currentCalendar = Calendar.getInstance();
             Calendar scheduledCalendar = (Calendar) currentCalendar.clone();
             int iSec = 5;
