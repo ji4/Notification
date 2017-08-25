@@ -54,7 +54,7 @@ public class KeyValueDB {
         }
     }
 
-    public static void deleteExpiredEvent(Context context, int iEventId) {
+    public static void deleteEvent(Context context, int iEventId) {
         String strEventIdList = getEventIdList(context);
         if (!strEventIdList.equals(NO_DATA)) {
             ArrayList<Integer> iArrEventId = DataConverter.convertToIntArray(strEventIdList);

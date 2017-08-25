@@ -37,7 +37,7 @@ public class NotifyService extends Service {
                 synchronized (this) {
                     checkScheduledEventsMatch();
                     try {
-                        wait(1000);
+                        wait(1000); //1s
                     } catch (Exception e) {
                     }
                 }
@@ -101,15 +101,6 @@ public class NotifyService extends Service {
         Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
     }
 
-    private ArrayList<Integer> getStoredData(int iEventId) {
-        String strEventData = KeyValueDB.getEventData(m_context, String.valueOf(iEventId));
-        ArrayList<Integer> iArrltEventData = null;
-        if (iEventId != -1 && !strEventData.equals(KeyValueDB.NO_DATA)) {
-            iArrltEventData = DataConverter.convertToIntArray(strEventData);
-        }
-        return iArrltEventData;
-    }
-
     private void checkScheduledEventsMatch() {
         //check if current time matches scheduled time
         for (ListIterator<Integer> iterator = m_iArrScheduledEvent.listIterator(); iterator.hasNext(); ) {
@@ -125,13 +116,22 @@ public class NotifyService extends Service {
                 Log.d("jia", "send a notification, scheduledTime: " + scheduledTime + ", currentTime: " + System.currentTimeMillis());
                 Notify.notify(iNotifyType, iEventId);
 
-                KeyValueDB.deleteExpiredEvent(m_context, iEventId);
+                KeyValueDB.deleteEvent(m_context, iEventId);
                 iterator.remove();
-            } else if (scheduledTime - System.currentTimeMillis() <= 0) { //set at past time
-                KeyValueDB.deleteExpiredEvent(m_context, iEventId);
+            } else if (scheduledTime - System.currentTimeMillis() <= 0) { //set at past time or expired
+                KeyValueDB.deleteEvent(m_context, iEventId);
                 iterator.remove();
             }
         }
+    }
+
+    private ArrayList<Integer> getStoredData(int iEventId) {
+        String strEventData = KeyValueDB.getEventData(m_context, String.valueOf(iEventId));
+        ArrayList<Integer> iArrltEventData = null;
+        if (iEventId != -1 && !strEventData.equals(KeyValueDB.NO_DATA)) {
+            iArrltEventData = DataConverter.convertToIntArray(strEventData);
+        }
+        return iArrltEventData;
     }
 
     private long setScheduledTime(ArrayList<Integer> iArrStoredEventData) {

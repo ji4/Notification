@@ -71,7 +71,7 @@ public class EventsManager extends AppCompatActivity {
                         KeyValueDB.saveEventId(m_context, i);
                         startNotifyService();
                     } else {
-                        KeyValueDB.deleteExpiredEvent(m_context, i);
+                        KeyValueDB.deleteEvent(m_context, i);
                         startNotifyService();
                     }
                     break;
