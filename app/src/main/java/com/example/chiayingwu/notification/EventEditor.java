@@ -152,7 +152,7 @@ public class EventEditor extends AppCompatActivity {
             scheduledCalendar.add(Calendar.MINUTE, iMin);
             scheduledCalendar.add(Calendar.SECOND, iSec);
 
-            strHour = String.valueOf(scheduledCalendar.get(Calendar.HOUR));
+            strHour = String.valueOf(scheduledCalendar.get(Calendar.HOUR_OF_DAY));
             strMin = String.valueOf(scheduledCalendar.get(Calendar.MINUTE));
             strSec = String.valueOf(scheduledCalendar.get(Calendar.SECOND));
             strAm_pm = String.valueOf(scheduledCalendar.get(Calendar.AM_PM));

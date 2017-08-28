@@ -22,7 +22,6 @@ public class NotifyService extends Service {
     private ServiceHandler mServiceHandler;
     private ArrayList<Integer> m_iArrScheduledEvent = new ArrayList<>(); //stores Event Id
     private long m_startTimeMillis;
-    private int iProcessNotifyId = 5;
 
     // Handler that receives messages from the thread
     private final class ServiceHandler extends Handler {
@@ -112,19 +111,29 @@ public class NotifyService extends Service {
             iterator.next();
 
             int iEventId = m_iArrScheduledEvent.get(i);
+            int iNotifyId = iEventId;
             ArrayList<Integer> iArrStoredEventData = getStoredData(iEventId);
             long scheduledTime = setScheduledTime(iArrStoredEventData);
             int iNotifyType = iArrStoredEventData.get(4);
 
             if (iNotifyType == NotifyUtil.BUILD_PROCESS) {
-                NotifyUtil.buildTimeProcess(iProcessNotifyId, R.drawable.ic_launcher, "Downloading", m_startTimeMillis, scheduledTime).show();
+                NotifyUtil.build(iNotifyType, iNotifyId, R.drawable.ic_launcher, "I'm title", "I'm content")
+                        .buildTimeProcess(iNotifyId, R.drawable.ic_launcher, "Downloading", m_startTimeMillis, scheduledTime)
+                        .show();
                 if (scheduledTime - System.currentTimeMillis() <= 0) {
                     KeyValueDB.deleteEvent(m_context, iEventId);
                     iterator.remove();
                 }
             } else if (System.currentTimeMillis() - scheduledTime >= 0 && System.currentTimeMillis() - scheduledTime <= 1000) {//1000=1s
                 Log.d("jia", "send a notification, scheduledTime: " + scheduledTime + ", currentTime: " + System.currentTimeMillis());
-                NotifyBuilderInstances.notify(iNotifyType, iEventId);
+                NotifyUtil.build(iNotifyType, iNotifyId, R.drawable.ic_launcher, "I'm title", "I'm content")
+                        .addBtn(R.mipmap.ic_launcher, "left", NotifyUtil.buildService(NotifyService.class, iEventId))
+                        .addBtn(R.mipmap.ic_launcher, "right", NotifyUtil.buildIntent(MainActivity.class))
+                        .playSound()
+                        .addMsg("1. someone published an article.")
+                        .addMsg("2. It's sunny today.")
+                        .setPicture(R.drawable.scenery)
+                        .show();
 
                 KeyValueDB.deleteEvent(m_context, iEventId);
                 iterator.remove();
@@ -164,7 +173,7 @@ public class NotifyService extends Service {
     private void addEventIfReminderActionSet(Intent intent) {
         int iEventId = intent.getIntExtra(Constants.KEY_REMIND_LATER, -1);
         if (iEventId != -1) {
-            NotifyUtil.cancel(6);
+            NotifyUtil.cancel(iEventId);
 
             Calendar currentCalendar = Calendar.getInstance();
             Calendar scheduledCalendar = (Calendar) currentCalendar.clone();

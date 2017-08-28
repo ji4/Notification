@@ -7,14 +7,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
-import com.example.chiayingwu.notification.builder.BigPicBuilder;
-import com.example.chiayingwu.notification.builder.BigTextBuilder;
-import com.example.chiayingwu.notification.builder.InboxBuilder;
-import com.example.chiayingwu.notification.builder.ProcessBuilder;
-import com.example.chiayingwu.notification.builder.SingleLineBuilder;
-
-import java.text.SimpleDateFormat;
-
 /**
  * Created by chiaying.wu on 2017/8/16.
  */
@@ -35,53 +27,9 @@ public class NotifyUtil {
         m_notificationManager = (NotificationManager) context.getSystemService(Activity.NOTIFICATION_SERVICE);
     }
 
-//    public static BaseBuilder build(int iBuildType, int id, int smallIcon, CharSequence contentTitle, CharSequence contentText) {
-//        BaseBuilder builder = new BaseBuilder();
-//        builder.setBase(smallIcon, contentTitle, contentText).setId(id);
-//        return builder;
-//    }
-
-
-    public static SingleLineBuilder buildSimple(int id, int smallIcon, CharSequence contentTitle, CharSequence contentText, PendingIntent contentIntent) {
-        SingleLineBuilder builder = new SingleLineBuilder();
-        builder.setBase(smallIcon, contentTitle, contentText).setId(id)
-                .setContentIntent(contentIntent);
-        return builder;
-    }
-
-    public static BigTextBuilder buildBigText(int id, int smallIcon, CharSequence contentTitle, CharSequence contentText) {
-        BigTextBuilder builder = new BigTextBuilder();
+    public static BaseBuilder build(int iNotifyType, int id, int smallIcon, CharSequence contentTitle, CharSequence contentText) {
+        BaseBuilder builder = new BaseBuilder(iNotifyType);
         builder.setBase(smallIcon, contentTitle, contentText).setId(id);
-        return builder;
-    }
-
-    public static InboxBuilder buildInbox(int id, int smallIcon, CharSequence contentTitle) {
-        InboxBuilder builder = new InboxBuilder();
-        builder.setBase(smallIcon, contentTitle, "").setId(id);
-        return builder;
-    }
-
-    public static BigPicBuilder buildBigPic(int id, int smallIcon, CharSequence contentTitle, CharSequence contentText, CharSequence summaryText) {
-        BigPicBuilder builder = new BigPicBuilder();
-        builder.setBase(smallIcon, contentTitle, contentText).setId(id);
-        builder.setSummaryText(summaryText);
-        return builder;
-    }
-
-    public static ProcessBuilder buildProcess(int id, int smallIcon, CharSequence contentTitle, int progress, int max) {
-        ProcessBuilder builder = new ProcessBuilder();
-        builder.setBase(smallIcon, contentTitle, progress + "/" + max).setId(id);
-        builder.setProgress(max, progress, false);
-        return builder;
-    }
-
-    public static ProcessBuilder buildTimeProcess(int id, int smallIcon, CharSequence contentTitle, long startTime, long endTime) {
-        ProcessBuilder builder = new ProcessBuilder();
-        SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm:ss");
-        builder.setBase(smallIcon, contentTitle, timeFormatter.format(System.currentTimeMillis()) + "/" + timeFormatter.format(endTime)).setId(id); //text
-        int max = (int) (endTime - startTime);
-        int process = (int) (max - (endTime - System.currentTimeMillis()));
-        builder.setProgress(max, process, false); //bar
         return builder;
     }
 
