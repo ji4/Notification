@@ -30,17 +30,17 @@ public class BaseBuilder {
         this.m_iNotifyType = iBuildType;
     }
 
-    //basic UI
-    protected int smallIcon;
-    protected CharSequence contentTitle;
-    protected CharSequence contentText;
+    //basic info
+    protected int m_iSmallIcon;
+    protected CharSequence m_contentTitle;
+    protected CharSequence m_contentText;
 
-    protected CharSequence summaryText;
+    protected CharSequence m_summaryText;
 
     //basic notification manager
-    private int id;
-    private PendingIntent contentIntent;
-    protected Notification.Builder builder;
+    private int m_iId;
+    private PendingIntent m_contentIntent;
+    protected Notification.Builder m_builder;
 
     /*inbox builder*/
     private ArrayList<String> m_strArrMsgList;
@@ -54,13 +54,13 @@ public class BaseBuilder {
     }
 
     /*big pic builder*/
-    private Bitmap bitmap;
+    private Bitmap m_bitmap;
     @DrawableRes
-    private int iBigPicture;
+    private int m_iBigPicture;
 
     public BaseBuilder setPicture(@DrawableRes int iDrawable) {
         if (m_iNotifyType == BUILD_BIG_PIC) {
-            this.iBigPicture = iDrawable;
+            this.m_iBigPicture = iDrawable;
         }
         return this;
     }
@@ -113,56 +113,56 @@ public class BaseBuilder {
     }
 
     public BaseBuilder setBase(int smallIcon, CharSequence contentTitle, CharSequence contentText) {
-        this.smallIcon = smallIcon;
-        this.contentTitle = contentTitle;
-        this.contentText = contentText;
+        this.m_iSmallIcon = smallIcon;
+        this.m_contentTitle = contentTitle;
+        this.m_contentText = contentText;
         return this;
     }
 
     public BaseBuilder setId(int id) {
-        this.id = id;
+        this.m_iId = id;
         return this;
     }
 
     public BaseBuilder setSummaryText(CharSequence summaryText) {
-        this.summaryText = summaryText;
+        this.m_summaryText = summaryText;
         return this;
     }
 
     public BaseBuilder setContentIntent(PendingIntent contentIntent) {
-        this.contentIntent = contentIntent;
+        this.m_contentIntent = contentIntent;
         return this;
     }
 
     protected void setupNotificationBuilder() {
-        builder = new Notification.Builder(NotifyUtil.g_context);
-        builder.setContentIntent(contentIntent); //The Intent a notification activates
+        m_builder = new Notification.Builder(NotifyUtil.g_context);
+        m_builder.setContentIntent(m_contentIntent); //The Intent a notification activates
 
-        if (smallIcon > 0)
-            builder.setSmallIcon(smallIcon);
+        if (m_iSmallIcon > 0)
+            m_builder.setSmallIcon(m_iSmallIcon);
 
         //Buttons
         if (listBtnActionBeans != null && listBtnActionBeans.size() > 0) {
             for (BtnActionBean bean : listBtnActionBeans) {
-                builder.addAction(bean.icon, bean.text, bean.pendingIntent);
+                m_builder.addAction(bean.icon, bean.text, bean.pendingIntent);
             }
         }
 
         //sound
         if (soundUri != null) {
-            builder.setSound(soundUri);
+            m_builder.setSound(soundUri);
         }
 
-        builder.setContentTitle(contentTitle);
-        builder.setContentText(contentText);
+        m_builder.setContentTitle(m_contentTitle);
+        m_builder.setContentText(m_contentText);
 
         switch (m_iNotifyType) {
             case BUILD_SIMPLE:
                 break;
             case BUILD_BIG_TEXT:
                 Notification.BigTextStyle bigTextStyle = new Notification.BigTextStyle();
-                bigTextStyle.setBigContentTitle(contentTitle).bigText(contentText).setSummaryText(summaryText);
-                builder.setStyle(bigTextStyle);
+                bigTextStyle.setBigContentTitle(m_contentTitle).bigText(m_contentText).setSummaryText(m_summaryText);
+                m_builder.setStyle(bigTextStyle);
                 break;
             case BUILD_INBOX:
                 Notification.InboxStyle inboxStyle = new Notification.InboxStyle();
@@ -171,25 +171,25 @@ public class BaseBuilder {
                 }
                 String strSummaryText = "[" + m_strArrMsgList.size() + "] messages";
                 inboxStyle.setSummaryText(strSummaryText);
-                builder.setContentText("You have " + strSummaryText).setStyle(inboxStyle);
+                m_builder.setContentText("You have " + strSummaryText).setStyle(inboxStyle);
                 break;
             case BUILD_BIG_PIC:
                 Notification.BigPictureStyle bigPictureStyle = new Notification.BigPictureStyle();
-                if (bitmap == null || bitmap.isRecycled()) {
-                    if (iBigPicture > 0) {
+                if (m_bitmap == null || m_bitmap.isRecycled()) {
+                    if (m_iBigPicture > 0) {
                         BitmapFactory.Options options = new BitmapFactory.Options();
                         options.inScaled = true;
                         options.inSampleSize = 2;
-                        bitmap = BitmapFactory.decodeResource(NotifyUtil.g_context.getResources(), iBigPicture, options);
+                        m_bitmap = BitmapFactory.decodeResource(NotifyUtil.g_context.getResources(), m_iBigPicture, options);
                     }
                 }
-                bigPictureStyle.bigPicture(bitmap).setBigContentTitle(contentTitle).setSummaryText(summaryText);
-                builder.setStyle(bigPictureStyle);
+                bigPictureStyle.bigPicture(m_bitmap).setBigContentTitle(m_contentTitle).setSummaryText(m_summaryText);
+                m_builder.setStyle(bigPictureStyle);
                 break;
             case BUILD_PROCESS:
-                builder.setProgress(m_iMax, m_iProgress, m_isInterminate);
-                builder.setDefaults(0);
-                builder.setPriority(Notification.PRIORITY_LOW);
+                m_builder.setProgress(m_iMax, m_iProgress, m_isInterminate);
+                m_builder.setDefaults(0);
+                m_builder.setPriority(Notification.PRIORITY_LOW);
                 break;
             case BUILD_ACTION:
                 break;
@@ -200,8 +200,8 @@ public class BaseBuilder {
 
     public void show() {
         setupNotificationBuilder();
-        Notification notification = builder.build(); //build a notification
-        NotifyUtil.notify(id, notification);
+        Notification notification = m_builder.build(); //build a notification
+        NotifyUtil.notify(m_iId, notification);
     }
 }
 
