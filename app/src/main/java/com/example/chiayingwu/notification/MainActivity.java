@@ -1,22 +1,21 @@
-//package com.example.chiayingwu.notification;
-//
-//import android.os.Bundle;
-//import android.support.v7.app.AppCompatActivity;
-//import android.view.View;
-//import android.widget.Button;
-//
-//public class MainActivity extends AppCompatActivity {
-//    private Button m_btn_simple, m_btn_bigText, m_btn_inbox, m_btn_bigPic, m_btn_progress;
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
+package com.example.chiayingwu.notification;
+
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.Button;
+
+public class MainActivity extends AppCompatActivity {
+    private Button m_btn_simple, m_btn_bigText, m_btn_inbox, m_btn_bigPic, m_btn_progress;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 //        findViews();
 //        setButtonListener();
-//        NotifyUtil.init(getApplicationContext());
-//    }
-//
+        NotifyUtil.init(getApplicationContext());
+    }
+
 //    Button.OnClickListener btnToNotify = new Button.OnClickListener() {
 //        @Override
 //        public void onClick(View view) {
@@ -68,4 +67,4 @@
 //        m_btn_bigPic.setOnClickListener(btnToNotify);
 //        m_btn_progress.setOnClickListener(btnToNotify);
 //    }
-//}
+}

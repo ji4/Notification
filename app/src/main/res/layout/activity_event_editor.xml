@@ -4,13 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="5dp"
-    tools:context="com.example.chiayingwu.notification.EventEditor"
     android:orientation="vertical"
-    android:weightSum="1">
+    android:padding="5dp"
+    android:weightSum="1"
+    tools:context="com.example.chiayingwu.notification.EventEditor">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <CheckBox
             android:id="@+id/activity_event_editor_chk_countdown"
             android:layout_width="match_parent"
@@ -35,14 +37,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:layout_weight="1.0"/>
+            android:layout_weight="1.0" />
 
         <NumberPicker
             android:id="@+id/activity_event_editor_numberPicker_am_pm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:layout_weight="1.0"/>
+            android:layout_weight="1.0" />
 
 
     </LinearLayout>
@@ -51,10 +53,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1.0">
+
             <RadioGroup
                 android:id="@+id/activity_event_editor_radioGroup"
                 android:layout_width="match_parent"
@@ -65,8 +69,8 @@
                     android:id="@+id/activity_event_editor_rb_simple"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Simple"
-                    android:onClick="onNotificationTypeRadioBtnClicked"/>
+                    android:onClick="onNotificationTypeRadioBtnClicked"
+                    android:text="Simple" />
 
                 <RadioButton
                     android:id="@+id/activity_event_editor_rb_bigText"
@@ -105,15 +109,18 @@
 
             </RadioGroup>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1.0">
+
             <CheckBox
                 android:id="@+id/activity_event_editor_chk_sound"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sound Effect" />
+                android:text="Sound Effect"
+                android:visibility="invisible" />
         </LinearLayout>
     </LinearLayout>
 
