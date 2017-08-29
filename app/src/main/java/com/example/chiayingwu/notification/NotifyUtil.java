@@ -27,17 +27,13 @@ public class NotifyUtil {
         m_notificationManager = (NotificationManager) context.getSystemService(Activity.NOTIFICATION_SERVICE);
     }
 
-    public static BaseBuilder build(int iNotifyType, int id, int smallIcon, CharSequence contentTitle, CharSequence contentText) {
+    public BaseBuilder build(int iNotifyType, int id, int smallIcon, CharSequence contentTitle, CharSequence contentText) {
         BaseBuilder builder = new BaseBuilder(iNotifyType);
         builder.setBase(smallIcon, contentTitle, contentText).setId(id);
         return builder;
     }
 
-    public static void notify(int id, Notification notification) {
-        m_notificationManager.notify(id, notification);
-    }
-
-    public static PendingIntent buildIntent(Class _class) {
+    public PendingIntent buildIntent(Class _class) {
         int iFlags = PendingIntent.FLAG_UPDATE_CURRENT;
         Intent intent = new Intent(NotifyUtil.g_context, _class); //get intent of current Activity
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -45,13 +41,17 @@ public class NotifyUtil {
         return pi;
     }
 
-    public static PendingIntent buildService(Class _class, int iEventId) {
+    public PendingIntent buildService(Class _class, int iEventId) {
         int iFlags = PendingIntent.FLAG_UPDATE_CURRENT;
         Intent intent = new Intent(NotifyUtil.g_context, _class); //get intent of current Activity
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(Constants.KEY_REMIND_LATER, iEventId);
         PendingIntent pi = PendingIntent.getService(g_context, 1, intent, iFlags); //get pending service
         return pi;
+    }
+
+    public static void notify(int id, Notification notification) {
+        m_notificationManager.notify(id, notification);
     }
 
     public static void cancel(int id) {

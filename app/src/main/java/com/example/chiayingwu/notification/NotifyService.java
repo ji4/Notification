@@ -24,6 +24,7 @@ public class NotifyService extends Service {
     private ArrayList<Integer> m_iArrScheduledEvent = new ArrayList<>(); //stores Event Id
     private long m_startTimeMillis;
     private KeyValueDB m_keyValueDB;
+    private NotifyUtil m_notifyUtil = new NotifyUtil();
 
     // Handler that receives messages from the thread
     private final class ServiceHandler extends Handler {
@@ -122,7 +123,7 @@ public class NotifyService extends Service {
             int iNotifyType = iArrStoredEventData.get(4);
 
             if (iNotifyType == NotifyUtil.BUILD_PROCESS) {
-                NotifyUtil.build(iNotifyType, iNotifyId, R.drawable.ic_launcher, "I'm title", "I'm content")
+                m_notifyUtil.build(iNotifyType, iNotifyId, R.drawable.ic_launcher, "I'm title", "I'm content")
                         .buildTimeProcess(iNotifyId, R.drawable.ic_launcher, "Downloading", m_startTimeMillis, scheduledTime)
                         .show();
                 if (scheduledTime - System.currentTimeMillis() <= 0) {
@@ -130,10 +131,9 @@ public class NotifyService extends Service {
                     iterator.remove();
                 }
             } else if (System.currentTimeMillis() - scheduledTime >= 0 && System.currentTimeMillis() - scheduledTime <= 1000) {//1000=1s
-                Log.d("jia", "send a notification, scheduledTime: " + scheduledTime + ", currentTime: " + System.currentTimeMillis());
-                NotifyUtil.build(iNotifyType, iNotifyId, R.drawable.ic_launcher, "I'm title", "I'm content")
-                        .addBtn(R.mipmap.ic_launcher, "left", NotifyUtil.buildService(NotifyService.class, iEventId))
-                        .addBtn(R.mipmap.ic_launcher, "right", NotifyUtil.buildIntent(MainActivity.class))
+                m_notifyUtil.build(iNotifyType, iNotifyId, R.drawable.ic_launcher, "I'm title", "I'm content")
+                        .addBtn(R.mipmap.ic_launcher, "left", m_notifyUtil.buildService(NotifyService.class, iEventId))
+                        .addBtn(R.mipmap.ic_launcher, "right", m_notifyUtil.buildIntent(MainActivity.class))
                         .playSound()
                         .addMsg("1. someone published an article.")
                         .addMsg("2. It's sunny today.")
