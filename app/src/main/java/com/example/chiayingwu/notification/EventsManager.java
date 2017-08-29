@@ -20,7 +20,7 @@ public class EventsManager extends AppCompatActivity {
     private ArrayList<Button> m_arrEventButtons;
     private ArrayList<CheckBox> m_cbxArrltEvent;
     private ArrayList<Integer> m_iArrEventCheckBoxRId, m_iArrEventButtonRId;
-    private KeyValueDB m_keyValueDB;
+    private KeyValueDB m_keyValueDB = new KeyValueDB();
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -85,7 +85,6 @@ public class EventsManager extends AppCompatActivity {
     private void initButtonText() {
         /*shared prefrences*/
         m_context = this;
-        m_keyValueDB = new KeyValueDB();
         m_keyValueDB.getPrefs(m_context);
 
         int iEventButtonsSize = m_arrEventButtons.size();

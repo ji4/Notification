@@ -18,7 +18,7 @@ import java.util.Calendar;
 
 public class EventEditor extends AppCompatActivity {
     private Context m_context;
-    private KeyValueDB m_keyValueDB;
+    private KeyValueDB m_keyValueDB = new KeyValueDB();
     //widgets
     private NumberPicker m_numPicker_hour, m_numPicker_min, m_numPicker_am_pm;
     private RadioGroup m_radioGroup;
@@ -80,7 +80,6 @@ public class EventEditor extends AppCompatActivity {
     private void init() {
         /*shared prefrences*/
         m_context = this;
-        m_keyValueDB = new KeyValueDB();
         m_keyValueDB.getPrefs(m_context);
 
         switchToTimeNumPicker();

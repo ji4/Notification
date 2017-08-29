@@ -23,7 +23,7 @@ public class NotifyService extends Service {
     private ServiceHandler mServiceHandler;
     private ArrayList<Integer> m_iArrScheduledEvent = new ArrayList<>(); //stores Event Id
     private long m_startTimeMillis;
-    private KeyValueDB m_keyValueDB;
+    private KeyValueDB m_keyValueDB = new KeyValueDB();
     private NotifyUtil m_notifyUtil = new NotifyUtil();
 
     // Handler that receives messages from the thread
@@ -57,7 +57,6 @@ public class NotifyService extends Service {
         Log.d("jia", "onCreate() called");
         m_context = this;
         NotifyUtil.init(m_context);
-        m_keyValueDB = new KeyValueDB();
         // Start up the thread running the service.  Note that we create a
         // separate thread because the service normally runs in the process's
         // main thread, which we don't want to block.  We also make it
