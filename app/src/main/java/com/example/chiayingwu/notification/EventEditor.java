@@ -23,11 +23,12 @@ public class EventEditor extends AppCompatActivity {
     private RadioGroup m_radioGroup;
     private CheckBox m_chk_sound;
     private CheckBox m_chk_countdown;
-    private ArrayList<Integer> m_iArryltNotificationRadioBtn;
+    private ArrayList<Integer> m_iArryltNotifyTypeRadioBtn;
     private Button m_btn_confirm;
     //values
     private int m_iEventId;
     private int m_iHour, m_iMin, m_iSec, m_iAm_pm, m_iNotification, m_iSound, m_iCountdown;
+    String m_strEventData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +65,9 @@ public class EventEditor extends AppCompatActivity {
         // Is the button now checked?
         boolean checked = ((RadioButton) view).isChecked();
 
-        int iNotificationRadioBtnSize = m_iArryltNotificationRadioBtn.size();
+        int iNotificationRadioBtnSize = m_iArryltNotifyTypeRadioBtn.size();
         for (int i = 0; i < iNotificationRadioBtnSize; i++) {
-            if (view.getId() == m_iArryltNotificationRadioBtn.get(i)) {
+            if (view.getId() == m_iArryltNotifyTypeRadioBtn.get(i)) {
                 if (checked) {
                     m_iNotification = i;
                     break;
@@ -83,14 +84,14 @@ public class EventEditor extends AppCompatActivity {
         switchToTimeNumPicker();
 
         /*notification radio button*/
-        m_radioGroup.check(m_iArryltNotificationRadioBtn.get(0));
+        m_radioGroup.check(m_iArryltNotifyTypeRadioBtn.get(0));
         /*sound effect checkbox*/
         m_chk_sound.setChecked(true);
     }
 
     private void getIntentData() {
         Intent it = getIntent();
-        m_iEventId = it.getIntExtra(Constants.EVENT_ID, -1);
+        m_iEventId = it.getIntExtra(Constants.KEY_EVENT_ID, -1);
     }
 
     private void setStoredData() {
@@ -109,7 +110,7 @@ public class EventEditor extends AppCompatActivity {
             m_numPicker_hour.setValue(m_iHour);
             m_numPicker_min.setValue(m_iMin);
             m_numPicker_am_pm.setValue(m_iAm_pm);
-            m_radioGroup.check(m_iArryltNotificationRadioBtn.get(m_iNotification));
+            m_radioGroup.check(m_iArryltNotifyTypeRadioBtn.get(m_iNotification));
             if (m_iSound == 1) {
                 m_chk_sound.setChecked(true);
             } else {//0
@@ -125,8 +126,6 @@ public class EventEditor extends AppCompatActivity {
     }
 
     private void saveEventData() {
-        //event code
-        String strEventId = String.valueOf(m_iEventId);
         //event time
         int iHour = m_numPicker_hour.getValue();
         int iMin = m_numPicker_min.getValue();
@@ -158,8 +157,7 @@ public class EventEditor extends AppCompatActivity {
             strAm_pm = String.valueOf(scheduledCalendar.get(Calendar.AM_PM));
         }
 
-        KeyValueDB.setEventData(m_context, strEventId, strHour + "," + strMin + "," + strSec + "," + strAm_pm + "," + strNotificationType + "," + strPlaySound + "," + strCountDownChecked);
-        KeyValueDB.saveEventId(m_context, m_iEventId);
+        m_strEventData = strHour + "," + strMin + "," + strSec + "," + strAm_pm + "," + strNotificationType + "," + strPlaySound + "," + strCountDownChecked;
     }
 
     private void switchToCountdownNumPicker() {
@@ -202,12 +200,18 @@ public class EventEditor extends AppCompatActivity {
 
     private void updateDataOnHomePage() {
         Intent it = new Intent();
-        it.putExtra(Constants.EVENT_ID, m_iEventId);
+        it.putExtra(Constants.KEY_EVENT_ID, m_iEventId);
         setResult(RESULT_OK, it);
     }
 
     private void startNotifyService() {
         Intent serviceIntent = new Intent(EventEditor.this, NotifyService.class);
+
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.KEY_EVENT_DATA, m_strEventData);
+        bundle.putInt(Constants.KEY_EVENT_ID, m_iEventId);
+        serviceIntent.putExtras(bundle);
+
         startService(serviceIntent);
     }
 
@@ -220,7 +224,7 @@ public class EventEditor extends AppCompatActivity {
         m_chk_sound = (CheckBox) findViewById(R.id.activity_event_editor_chk_sound);
         m_btn_confirm = (Button) findViewById(R.id.activity_edit_event_btn_confirm);
 
-        m_iArryltNotificationRadioBtn = new ArrayList<>(Arrays.asList(
+        m_iArryltNotifyTypeRadioBtn = new ArrayList<>(Arrays.asList(
                 R.id.activity_event_editor_rb_simple,
                 R.id.activity_event_editor_rb_bigText,
                 R.id.activity_event_editor_rb_inbox,

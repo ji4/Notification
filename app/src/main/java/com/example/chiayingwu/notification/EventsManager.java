@@ -26,7 +26,7 @@ public class EventsManager extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == EVENT_EDITOR) {
             if (resultCode == RESULT_OK) {
-                int iEventId = data.getIntExtra(Constants.EVENT_ID, -1);
+                int iEventId = data.getIntExtra(Constants.KEY_EVENT_ID, -1);
                 setTimeOnButtonText(iEventId, m_arrEventButtons.get(iEventId));
                 m_cbxArrltEvent.get(iEventId).setChecked(true);
             }
@@ -53,7 +53,7 @@ public class EventsManager extends AppCompatActivity {
                 }
                 if (iEventId != -1) {
                     Intent it = new Intent(EventsManager.this, EventEditor.class);
-                    it.putExtra(Constants.EVENT_ID, iEventId);
+                    it.putExtra(Constants.KEY_EVENT_ID, iEventId);
                     startActivityForResult(it, EVENT_EDITOR);
                     break;
                 }

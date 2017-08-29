@@ -5,6 +5,8 @@ package com.example.chiayingwu.notification;
  */
 
 public final class Constants {
-    public static final String EVENT_ID = "EVENT_ID";
     public static final String KEY_REMIND_LATER = "KEY_REMIND_LATER";
+    public static final String KEY_EVENT_ID = "KEY_EVENT_ID";
+    public static final String KEY_EVENT_DATA = "KEY_EVENT_DATA";
+
 }

@@ -13,9 +13,6 @@ public class KeyValueDB {
     public static String PREF_NAME = "SP";
     public static String NO_DATA = "NO_DATA";
     private static String KEY_ID_LIST = "ID_LIST";
-    private static final int EVENT_ADD = 0;
-    private static final int EVENT_DELETE = 1;
-    private static int eventOperation;
 
     public KeyValueDB() {
     }

@@ -3,6 +3,7 @@ package com.example.chiayingwu.notification;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -75,8 +76,10 @@ public class NotifyService extends Service {
         m_startTimeMillis = System.currentTimeMillis();
 
         if (intent != null) {
+            saveIntentDataFromEventEditor(intent);
             addEventIfReminderActionSet(intent);
         }
+
 
         //get all event id from shared pref
         String strEventIdList = KeyValueDB.getEventIdList(m_context);
@@ -169,6 +172,15 @@ public class NotifyService extends Service {
         return calendar.getTimeInMillis();
     }
 
+    private void saveIntentDataFromEventEditor(Intent intent) {
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            int iEventId = bundle.getInt(Constants.KEY_EVENT_ID);
+            String strEventData = bundle.getString(Constants.KEY_EVENT_DATA);
+            KeyValueDB.setEventData(m_context, String.valueOf(iEventId), strEventData);
+            KeyValueDB.saveEventId(m_context, iEventId);
+        }
+    }
 
     private void addEventIfReminderActionSet(Intent intent) {
         int iEventId = intent.getIntExtra(Constants.KEY_REMIND_LATER, -1);
