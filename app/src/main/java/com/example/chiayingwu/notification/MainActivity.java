@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 //        findViews();
 //        setButtonListener();
-        NotifyUtil.init(getApplicationContext());
+//        NotifyUtil.init(getApplicationContext());
     }
 
 //    Button.OnClickListener btnToNotify = new Button.OnClickListener() {

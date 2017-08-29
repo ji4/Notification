@@ -22,7 +22,7 @@ public class NotifyUtil {
     public static final int BUILD_PROCESS = 4;
     public static final int BUILD_ACTION = 5;
 
-    public static void init(Context context) {
+    public void init(Context context) {
         g_context = context;
         m_notificationManager = (NotificationManager) context.getSystemService(Activity.NOTIFICATION_SERVICE);
     }
@@ -50,11 +50,11 @@ public class NotifyUtil {
         return pi;
     }
 
-    public static void notify(int id, Notification notification) {
+    public void notify(int id, Notification notification) {
         m_notificationManager.notify(id, notification);
     }
 
-    public static void cancel(int id) {
+    public void cancel(int id) {
         if (m_notificationManager != null) {
             m_notificationManager.cancel(id);
         }

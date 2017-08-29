@@ -201,7 +201,8 @@ public class BaseBuilder {
     public void show() {
         setupNotificationBuilder();
         Notification notification = m_builder.build(); //build a notification
-        NotifyUtil.notify(m_iId, notification);
+        NotifyUtil notifyUtil = new NotifyUtil();
+        notifyUtil.notify(m_iId, notification);
     }
 }
 

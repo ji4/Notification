@@ -103,7 +103,7 @@ public class NotifyService extends Service {
 
     private void init(){
         m_context = this;
-        NotifyUtil.init(m_context);
+        m_notifyUtil.init(m_context);
     }
 
     private void checkScheduledEventsMatch() {
@@ -183,7 +183,7 @@ public class NotifyService extends Service {
     private void addEventIfReminderActionSet(Intent intent) {
         int iEventId = intent.getIntExtra(Constants.KEY_REMIND_LATER, -1);
         if (iEventId != -1) {
-            NotifyUtil.cancel(iEventId);
+            m_notifyUtil.cancel(iEventId);
 
             Calendar currentCalendar = Calendar.getInstance();
             Calendar scheduledCalendar = (Calendar) currentCalendar.clone();
