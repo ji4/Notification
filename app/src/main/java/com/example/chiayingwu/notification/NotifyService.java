@@ -10,7 +10,6 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -34,9 +33,6 @@ public class NotifyService extends Service {
 
         @Override
         public void handleMessage(Message msg) {
-            Log.d("jia", "handleMessage() called");
-            Log.d("jia", "m_iArrScheduledEvent.size(): " + m_iArrScheduledEvent.size());
-
             while (m_iArrScheduledEvent.size() > 0) {
                 synchronized (this) {
                     checkScheduledEventsMatch();
@@ -54,7 +50,6 @@ public class NotifyService extends Service {
 
     @Override
     public void onCreate() {
-        Log.d("jia", "onCreate() called");
         init();
         // Start up the thread running the service.  Note that we create a
         // separate thread because the service normally runs in the process's
@@ -71,7 +66,6 @@ public class NotifyService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("jia", "onStartCommand() called");
         Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
 
         m_startTimeMillis = System.currentTimeMillis();
@@ -85,7 +79,6 @@ public class NotifyService extends Service {
         //get all event id from shared pref
         String strEventIdList = m_keyValueDB.getEventIdList(m_context);
         m_iArrScheduledEvent = DataConverter.convertToIntArray(strEventIdList);
-        Log.d("jia", "m_iArrScheduledEvent.size() in onStartCommand: " + m_iArrScheduledEvent.size());
 
         // For each start request, send a message to start a job and deliver the
         // start ID so we know which request we're stopping when we finish the job
@@ -112,6 +105,7 @@ public class NotifyService extends Service {
         m_context = this;
         NotifyUtil.init(m_context);
     }
+
     private void checkScheduledEventsMatch() {
         //check if current time matches scheduled time
         for (ListIterator<Integer> iterator = m_iArrScheduledEvent.listIterator(); iterator.hasNext(); ) {
