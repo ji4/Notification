@@ -55,8 +55,7 @@ public class NotifyService extends Service {
     @Override
     public void onCreate() {
         Log.d("jia", "onCreate() called");
-        m_context = this;
-        NotifyUtil.init(m_context);
+        init();
         // Start up the thread running the service.  Note that we create a
         // separate thread because the service normally runs in the process's
         // main thread, which we don't want to block.  We also make it
@@ -109,6 +108,10 @@ public class NotifyService extends Service {
         Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
     }
 
+    private void init(){
+        m_context = this;
+        NotifyUtil.init(m_context);
+    }
     private void checkScheduledEventsMatch() {
         //check if current time matches scheduled time
         for (ListIterator<Integer> iterator = m_iArrScheduledEvent.listIterator(); iterator.hasNext(); ) {

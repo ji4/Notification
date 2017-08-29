@@ -40,7 +40,7 @@ public class EventsManager extends AppCompatActivity {
         setContentView(R.layout.activity_events_manager);
         findViews();
         setButtonListener();
-        initButtonText();
+        init();
     }
 
     Button.OnClickListener btnForTime = new Button.OnClickListener() {
@@ -81,12 +81,17 @@ public class EventsManager extends AppCompatActivity {
         }
     };
 
+    private void init(){
+        initSharedPref();
+        initButtonText();
+    }
 
-    private void initButtonText() {
-        /*shared prefrences*/
+    private void initSharedPref(){
         m_context = this;
         m_keyValueDB.getPrefs(m_context);
+    }
 
+    private void initButtonText() {
         int iEventButtonsSize = m_arrEventButtons.size();
         for (int iEventId = 0; iEventId < iEventButtonsSize; iEventId++) {
             setTimeOnButtonText(iEventId, m_arrEventButtons.get(iEventId));
