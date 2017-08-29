@@ -20,6 +20,7 @@ public class EventsManager extends AppCompatActivity {
     private ArrayList<Button> m_arrEventButtons;
     private ArrayList<CheckBox> m_cbxArrltEvent;
     private ArrayList<Integer> m_iArrEventCheckBoxRId, m_iArrEventButtonRId;
+    private KeyValueDB m_keyValueDB;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -68,10 +69,10 @@ public class EventsManager extends AppCompatActivity {
             for (int i = 0; i < iEventCheckBoxSize; i++) {
                 if (compoundButton.getId() == m_iArrEventCheckBoxRId.get(i)) {
                     if (isChecked) {
-                        KeyValueDB.saveEventId(m_context, i);
+                        m_keyValueDB.saveEventId(m_context, i);
                         startNotifyService();
                     } else {
-                        KeyValueDB.deleteEvent(m_context, i);
+                        m_keyValueDB.deleteEvent(m_context, i);
                         startNotifyService();
                     }
                     break;
@@ -84,7 +85,8 @@ public class EventsManager extends AppCompatActivity {
     private void initButtonText() {
         /*shared prefrences*/
         m_context = this;
-        KeyValueDB.getPrefs(m_context);
+        m_keyValueDB = new KeyValueDB();
+        m_keyValueDB.getPrefs(m_context);
 
         int iEventButtonsSize = m_arrEventButtons.size();
         for (int iEventId = 0; iEventId < iEventButtonsSize; iEventId++) {
@@ -94,7 +96,7 @@ public class EventsManager extends AppCompatActivity {
 
     private void setTimeOnButtonText(int iEventId, Button eventButton) {
         //set stored data
-        String strEventData = KeyValueDB.getEventData(m_context, String.valueOf(iEventId));
+        String strEventData = m_keyValueDB.getEventData(m_context, String.valueOf(iEventId));
         if (iEventId != -1 && !strEventData.equals(KeyValueDB.NO_DATA)) {
             ArrayList<Integer> iArrltEventData = DataConverter.convertToIntArray(strEventData);
             String strHour = String.valueOf(iArrltEventData.get(0));

@@ -17,25 +17,25 @@ public class KeyValueDB {
     public KeyValueDB() {
     }
 
-    public static SharedPreferences getPrefs(Context context) {
+    public SharedPreferences getPrefs(Context context) {
         return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
-    private static void commitToEditor(Context context, String strKeyName, String strKeyValue) {
+    private void commitToEditor(Context context, String strKeyName, String strKeyValue) {
         SharedPreferences.Editor editor = getPrefs(context).edit();
         editor.putString(strKeyName, strKeyValue);
         editor.commit();
     }
 
-    public static void setEventData(Context context, String strKeyName, String strKeyValue) {
+    public void setEventData(Context context, String strKeyName, String strKeyValue) {
         commitToEditor(context, strKeyName, strKeyValue);
     }
 
-    public static String getEventData(Context context, String strKeyName) {
+    public String getEventData(Context context, String strKeyName) {
         return getPrefs(context).getString(strKeyName, NO_DATA);
     }
 
-    public static void saveEventId(Context context, int iEventId) {
+    public void saveEventId(Context context, int iEventId) {
         String strEventId = String.valueOf(iEventId);
         String strEventIdList = getEventIdList(context);
         if (!strEventIdList.equals(NO_DATA)) {
@@ -51,7 +51,7 @@ public class KeyValueDB {
         }
     }
 
-    public static void deleteEvent(Context context, int iEventId) {
+    public void deleteEvent(Context context, int iEventId) {
         String strEventIdList = getEventIdList(context);
         if (!strEventIdList.equals(NO_DATA)) {
             ArrayList<Integer> iArrEventId = DataConverter.convertToIntArray(strEventIdList);
@@ -61,11 +61,11 @@ public class KeyValueDB {
         }
     }
 
-    public static String getEventIdList(Context context) {
+    public String getEventIdList(Context context) {
         return getPrefs(context).getString(KEY_ID_LIST, NO_DATA);
     }
 
-    private static Boolean checkEventExist(int iEventId, ArrayList<Integer> iArrEventId) {
+    private Boolean checkEventExist(int iEventId, ArrayList<Integer> iArrEventId) {
         for (int i = 0; i < iArrEventId.size(); i++) {
             if (iEventId == iArrEventId.get(i)) { //if the event has existed
                 return true;

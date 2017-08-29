@@ -23,6 +23,7 @@ public class NotifyService extends Service {
     private ServiceHandler mServiceHandler;
     private ArrayList<Integer> m_iArrScheduledEvent = new ArrayList<>(); //stores Event Id
     private long m_startTimeMillis;
+    private KeyValueDB m_keyValueDB;
 
     // Handler that receives messages from the thread
     private final class ServiceHandler extends Handler {
@@ -55,6 +56,7 @@ public class NotifyService extends Service {
         Log.d("jia", "onCreate() called");
         m_context = this;
         NotifyUtil.init(m_context);
+        m_keyValueDB = new KeyValueDB();
         // Start up the thread running the service.  Note that we create a
         // separate thread because the service normally runs in the process's
         // main thread, which we don't want to block.  We also make it
@@ -82,7 +84,7 @@ public class NotifyService extends Service {
 
 
         //get all event id from shared pref
-        String strEventIdList = KeyValueDB.getEventIdList(m_context);
+        String strEventIdList = m_keyValueDB.getEventIdList(m_context);
         m_iArrScheduledEvent = DataConverter.convertToIntArray(strEventIdList);
         Log.d("jia", "m_iArrScheduledEvent.size() in onStartCommand: " + m_iArrScheduledEvent.size());
 
@@ -124,7 +126,7 @@ public class NotifyService extends Service {
                         .buildTimeProcess(iNotifyId, R.drawable.ic_launcher, "Downloading", m_startTimeMillis, scheduledTime)
                         .show();
                 if (scheduledTime - System.currentTimeMillis() <= 0) {
-                    KeyValueDB.deleteEvent(m_context, iEventId);
+                    m_keyValueDB.deleteEvent(m_context, iEventId);
                     iterator.remove();
                 }
             } else if (System.currentTimeMillis() - scheduledTime >= 0 && System.currentTimeMillis() - scheduledTime <= 1000) {//1000=1s
@@ -138,17 +140,17 @@ public class NotifyService extends Service {
                         .setPicture(R.drawable.scenery)
                         .show();
 
-                KeyValueDB.deleteEvent(m_context, iEventId);
+                m_keyValueDB.deleteEvent(m_context, iEventId);
                 iterator.remove();
             } else if (scheduledTime - System.currentTimeMillis() <= 0) { //set at past time or expired
-                KeyValueDB.deleteEvent(m_context, iEventId);
+                m_keyValueDB.deleteEvent(m_context, iEventId);
                 iterator.remove();
             }
         }
     }
 
     private ArrayList<Integer> getStoredData(int iEventId) {
-        String strEventData = KeyValueDB.getEventData(m_context, String.valueOf(iEventId));
+        String strEventData = m_keyValueDB.getEventData(m_context, String.valueOf(iEventId));
         ArrayList<Integer> iArrltEventData = null;
         if (iEventId != -1 && !strEventData.equals(KeyValueDB.NO_DATA)) {
             iArrltEventData = DataConverter.convertToIntArray(strEventData);
@@ -177,8 +179,8 @@ public class NotifyService extends Service {
         if (bundle != null) {
             int iEventId = bundle.getInt(Constants.KEY_EVENT_ID);
             String strEventData = bundle.getString(Constants.KEY_EVENT_DATA);
-            KeyValueDB.setEventData(m_context, String.valueOf(iEventId), strEventData);
-            KeyValueDB.saveEventId(m_context, iEventId);
+            m_keyValueDB.setEventData(m_context, String.valueOf(iEventId), strEventData);
+            m_keyValueDB.saveEventId(m_context, iEventId);
         }
     }
 
@@ -199,8 +201,8 @@ public class NotifyService extends Service {
             String strAm_pm = String.valueOf(scheduledCalendar.get(Calendar.AM_PM));
             String strPlaySound = "0";
             String strCountDownChecked = "0";
-            KeyValueDB.setEventData(m_context, strEventId, strHour + "," + strMin + "," + strSec + "," + strAm_pm + "," + NotifyUtil.BUILD_ACTION + "," + strPlaySound + "," + strCountDownChecked);
-            KeyValueDB.saveEventId(m_context, iEventId);
+            m_keyValueDB.setEventData(m_context, strEventId, strHour + "," + strMin + "," + strSec + "," + strAm_pm + "," + NotifyUtil.BUILD_ACTION + "," + strPlaySound + "," + strCountDownChecked);
+            m_keyValueDB.saveEventId(m_context, iEventId);
         }
     }
 }
