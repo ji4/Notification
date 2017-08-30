@@ -198,11 +198,9 @@ public class BaseBuilder {
         }
     }
 
-    public void show() {
+    public Notification show() {
         setupNotificationBuilder();
-        Notification notification = m_builder.build(); //build a notification
-        NotifyUtil notifyUtil = new NotifyUtil();
-        notifyUtil.notify(m_iId, notification);
+        return m_builder.build(); //build a notification
     }
 }
 

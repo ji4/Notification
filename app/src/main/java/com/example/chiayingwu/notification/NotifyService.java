@@ -75,7 +75,6 @@ public class NotifyService extends Service {
             addEventIfReminderActionSet(intent);
         }
 
-
         //get all event id from shared pref
         String strEventIdList = m_keyValueDB.getEventIdList(m_context);
         m_iArrScheduledEvent = DataConverter.convertToIntArray(strEventIdList);
@@ -120,8 +119,9 @@ public class NotifyService extends Service {
 
             if (iNotifyType == NotifyUtil.BUILD_PROCESS) {
                 m_notifyUtil.build(iNotifyType, iNotifyId, R.drawable.ic_launcher, "I'm title", "I'm content")
-                        .buildTimeProcess(iNotifyId, R.drawable.ic_launcher, "Downloading", m_startTimeMillis, scheduledTime)
-                        .show();
+                        .buildTimeProcess(iNotifyId, R.drawable.ic_launcher, "Downloading", m_startTimeMillis, scheduledTime);
+                m_notifyUtil.notify(iNotifyId);
+
                 if (scheduledTime - System.currentTimeMillis() <= 0) {
                     m_keyValueDB.deleteEvent(m_context, iEventId);
                     iterator.remove();
@@ -133,8 +133,8 @@ public class NotifyService extends Service {
                         .playSound()
                         .addMsg("1. someone published an article.")
                         .addMsg("2. It's sunny today.")
-                        .setPicture(R.drawable.scenery)
-                        .show();
+                        .setPicture(R.drawable.scenery);
+                m_notifyUtil.notify(iNotifyId);
 
                 m_keyValueDB.deleteEvent(m_context, iEventId);
                 iterator.remove();
@@ -188,7 +188,6 @@ public class NotifyService extends Service {
 
         if (iEventAction == Constants.ACTION_EVENT_ADD) {
             m_keyValueDB.saveEventId(m_context, iEventId);
-
         } else if (iEventAction == Constants.ACTION_EVENT_DELETE) {
             m_keyValueDB.deleteEvent(m_context, iEventId);
         }

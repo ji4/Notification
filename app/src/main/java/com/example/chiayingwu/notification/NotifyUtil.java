@@ -15,6 +15,8 @@ public class NotifyUtil {
     public static Context g_context;
     private static NotificationManager m_notificationManager;
 
+    private BaseBuilder m_builder;
+
     public static final int BUILD_SIMPLE = 0;
     public static final int BUILD_BIG_TEXT = 1;
     public static final int BUILD_INBOX = 2;
@@ -28,9 +30,9 @@ public class NotifyUtil {
     }
 
     public BaseBuilder build(int iNotifyType, int id, int smallIcon, CharSequence contentTitle, CharSequence contentText) {
-        BaseBuilder builder = new BaseBuilder(iNotifyType);
-        builder.setBase(smallIcon, contentTitle, contentText).setId(id);
-        return builder;
+        m_builder = new BaseBuilder(iNotifyType);
+        m_builder.setBase(smallIcon, contentTitle, contentText).setId(id);
+        return m_builder;
     }
 
     public PendingIntent buildIntent(Class _class) {
@@ -50,7 +52,9 @@ public class NotifyUtil {
         return pi;
     }
 
-    public void notify(int id, Notification notification) {
+    public void notify(int id) {
+        m_builder.setupNotificationBuilder();
+        Notification notification = m_builder.show();
         m_notificationManager.notify(id, notification);
     }
 
