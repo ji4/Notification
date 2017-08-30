@@ -28,7 +28,7 @@ public class EventEditor extends AppCompatActivity {
     private Button m_btn_confirm;
     //values
     private int m_iEventId;
-    private int m_iHour, m_iMin, m_iSec, m_iAm_pm, m_iNotification, m_iSound, m_iCountdown;
+    private int m_iHour, m_iMin, m_iSec, m_iAm_pm, m_iNotificationType, m_iSound, m_iCountdown;
     private String m_strEventData;
 
     @Override
@@ -57,7 +57,7 @@ public class EventEditor extends AppCompatActivity {
                 getInputData();
                 m_controller.saveEventIdAndDataToBundle(m_iEventId, m_strEventData);
                 m_controller.startNotifyService(m_context);
-                updateDataOnHomePage();
+                updateDataOnParentActivity();
                 finish();
             }
         });
@@ -71,7 +71,7 @@ public class EventEditor extends AppCompatActivity {
         for (int i = 0; i < iNotificationRadioBtnSize; i++) {
             if (view.getId() == m_iArryltNotifyTypeRadioBtn.get(i)) {
                 if (checked) {
-                    m_iNotification = i;
+                    m_iNotificationType = i;
                     break;
                 }
             }
@@ -106,14 +106,14 @@ public class EventEditor extends AppCompatActivity {
             m_iMin = iArrltEventData.get(1);
             m_iSec = iArrltEventData.get(2);
             m_iAm_pm = iArrltEventData.get(3);
-            m_iNotification = iArrltEventData.get(4);
+            m_iNotificationType = iArrltEventData.get(4);
             m_iSound = iArrltEventData.get(5);
             m_iCountdown = iArrltEventData.get(6);
 
             m_numPicker_hour.setValue(m_iHour);
             m_numPicker_min.setValue(m_iMin);
             m_numPicker_am_pm.setValue(m_iAm_pm);
-            m_radioGroup.check(m_iArryltNotifyTypeRadioBtn.get(m_iNotification));
+            m_radioGroup.check(m_iArryltNotifyTypeRadioBtn.get(m_iNotificationType));
             if (m_iSound == 1) {
                 m_chk_sound.setChecked(true);
             } else {//0
@@ -137,7 +137,7 @@ public class EventEditor extends AppCompatActivity {
         String strMin = String.valueOf(iMin);
         String strAm_pm = String.valueOf(iAm_pm);
         //event notification type
-        String strNotificationType = String.valueOf(m_iNotification);
+        String strNotificationType = String.valueOf(m_iNotificationType);
         //event sound effect
         String strPlaySound = m_chk_sound.isChecked() ? "1" : "0";
         //event numPicker time/countdown
@@ -201,7 +201,7 @@ public class EventEditor extends AppCompatActivity {
         m_numPicker_am_pm.setValue(1);
     }
 
-    private void updateDataOnHomePage() {
+    private void updateDataOnParentActivity() {
         Intent it = new Intent();
         it.putExtra(Constants.KEY_EVENT_ID, m_iEventId);
         setResult(RESULT_OK, it);
