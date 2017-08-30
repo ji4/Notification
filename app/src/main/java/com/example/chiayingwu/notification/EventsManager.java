@@ -21,8 +21,6 @@ public class EventsManager extends AppCompatActivity {
     private ArrayList<Button> m_arrEventButtons;
     private ArrayList<CheckBox> m_cbxArrltEvent;
     private ArrayList<Integer> m_iArrEventCheckBoxRId, m_iArrEventButtonRId;
-    private KeyValueDB m_keyValueDB = new KeyValueDB();
-    private int m_iEventAction;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -70,12 +68,13 @@ public class EventsManager extends AppCompatActivity {
             int iEventCheckBoxSize = m_iArrEventCheckBoxRId.size();
             for (int iEventId = 0; iEventId < iEventCheckBoxSize; iEventId++) {
                 if (compoundButton.getId() == m_iArrEventCheckBoxRId.get(iEventId)) {
+                    int iEventAction;
                     if (isChecked) {
-                        m_iEventAction = Constants.ACTION_EVENT_ADD;
+                        iEventAction = Constants.ACTION_EVENT_ADD;
                     } else {
-                        m_iEventAction = Constants.ACTION_EVENT_DELETE;
+                        iEventAction = Constants.ACTION_EVENT_DELETE;
                     }
-                    m_controller.saveEventActionToIntent(Constants.KEY_EVENT_ACTION, m_iEventAction + "," + iEventId);
+                    m_controller.saveEventActionToIntent(Constants.KEY_EVENT_ACTION, iEventAction + "," + iEventId);
                     m_controller.startNotifyService(m_context);
                     break;
                 }

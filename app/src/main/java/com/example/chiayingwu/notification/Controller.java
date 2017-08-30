@@ -11,7 +11,6 @@ import android.os.Bundle;
 public class Controller {
     private KeyValueDB m_keyValueDB = new KeyValueDB();
     private Bundle m_bundle;
-    //    private Intent m_intent;
     private String m_strKeyName, m_strKeyValue;
 
     public void initSharedPrefs(Context context) {

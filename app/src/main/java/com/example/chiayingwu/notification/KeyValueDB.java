@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class KeyValueDB {
     public static String PREF_NAME = "SP";
     public static String NO_DATA = "NO_DATA";
-    private static String KEY_ID_LIST = "ID_LIST";
+    private static String KEY_ID_LIST = "KEY_ID_LIST";
 
     public KeyValueDB() {
     }
