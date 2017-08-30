@@ -22,7 +22,6 @@ public class EventsManager extends AppCompatActivity {
     private ArrayList<CheckBox> m_cbxArrltEvent;
     private ArrayList<Integer> m_iArrEventCheckBoxRId, m_iArrEventButtonRId;
     private KeyValueDB m_keyValueDB = new KeyValueDB();
-    private int m_iCheckedEventId;
     private int m_iEventAction;
 
     @Override
@@ -69,17 +68,15 @@ public class EventsManager extends AppCompatActivity {
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
             int iEventCheckBoxSize = m_iArrEventCheckBoxRId.size();
-            for (int i = 0; i < iEventCheckBoxSize; i++) {
-                if (compoundButton.getId() == m_iArrEventCheckBoxRId.get(i)) {
+            for (int iEventId = 0; iEventId < iEventCheckBoxSize; iEventId++) {
+                if (compoundButton.getId() == m_iArrEventCheckBoxRId.get(iEventId)) {
                     if (isChecked) {
-                        m_iCheckedEventId = i;
                         m_iEventAction = Constants.ACTION_EVENT_ADD;
-                        startNotifyService();
                     } else {
-                        m_iCheckedEventId = i;
                         m_iEventAction = Constants.ACTION_EVENT_DELETE;
-                        startNotifyService();
                     }
+                    m_controller.saveEventActionToIntent(Constants.KEY_EVENT_ACTION, m_iEventAction + "," + iEventId);
+                    m_controller.startNotifyService(m_context);
                     break;
                 }
             }
@@ -87,11 +84,11 @@ public class EventsManager extends AppCompatActivity {
     };
 
     private void init() {
-        initSharedPref();
+        initSharedPrefs();
         initButtonText();
     }
 
-    private void initSharedPref() {
+    private void initSharedPrefs() {
         m_context = this;
         m_keyValueDB.getPrefs(m_context);
     }
@@ -113,12 +110,6 @@ public class EventsManager extends AppCompatActivity {
             String strAm_pm = String.valueOf(iArrltEventData.get(3));
             eventButton.setText(strHour + " : " + strMin + " " + (strAm_pm == "0" ? "AM" : "PM"));
         }
-    }
-
-    private void startNotifyService() {
-        Intent serviceIntent = new Intent(EventsManager.this, NotifyService.class);
-        serviceIntent.putExtra(Constants.KEY_EVENT_ACTION, m_iEventAction + "," + m_iCheckedEventId);
-        startService(serviceIntent);
     }
 
     private void findViews() {
