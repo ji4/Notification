@@ -71,7 +71,7 @@ public class NotifyService extends Service {
         m_startTimeMillis = System.currentTimeMillis();
 
         if (intent != null) {
-            saveIntentDataFromEventEditor(intent);
+            saveIntentData(intent);
             addEventIfReminderActionSet(intent);
         }
 
@@ -101,7 +101,7 @@ public class NotifyService extends Service {
         Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
     }
 
-    private void init(){
+    private void init() {
         m_context = this;
         m_notifyUtil.init(m_context);
     }
@@ -168,6 +168,45 @@ public class NotifyService extends Service {
         calendar.set(Calendar.AM_PM, iAm_pm == 0 ? Calendar.AM : Calendar.PM);
 
         return calendar.getTimeInMillis();
+    }
+
+    private void saveIntentData(Intent intent){
+        String strEventActionAndId = intent.getStringExtra(Constants.KEY_EVENT_ACTION);
+        Bundle bundle = intent.getExtras();
+
+        if (strEventActionAndId != null) {
+            ArrayList<Integer> iArrEventActionAndId = DataConverter.convertToIntArray(strEventActionAndId);
+            int iEventAction = iArrEventActionAndId.get(0);
+            int iEventId = iArrEventActionAndId.get(1);
+
+            if (iEventAction == Constants.ACTION_EVENT_ADD) {
+                m_keyValueDB.saveEventId(m_context, iEventId);
+
+            } else if (iEventAction == Constants.ACTION_EVENT_DELETE) {
+                m_keyValueDB.deleteEvent(m_context, iEventId);
+            }
+        }else if (bundle != null) {
+            int iEventId = bundle.getInt(Constants.KEY_EVENT_ID);
+            String strEventData = bundle.getString(Constants.KEY_EVENT_DATA);
+            m_keyValueDB.setEventData(m_context, String.valueOf(iEventId), strEventData);
+            m_keyValueDB.saveEventId(m_context, iEventId);
+        }
+    }
+
+    private void saveIntentDataFromEventsManager(Intent intent) {
+        String strEventActionAndId = intent.getStringExtra(Constants.KEY_EVENT_ACTION);
+        if (strEventActionAndId != null) {
+            ArrayList<Integer> iArrEventActionAndId = DataConverter.convertToIntArray(strEventActionAndId);
+            int iEventAction = iArrEventActionAndId.get(0);
+            int iEventId = iArrEventActionAndId.get(1);
+
+            if (iEventAction == Constants.ACTION_EVENT_ADD) {
+                m_keyValueDB.saveEventId(m_context, iEventId);
+
+            } else if (iEventAction == Constants.ACTION_EVENT_DELETE) {
+                m_keyValueDB.deleteEvent(m_context, iEventId);
+            }
+        }
     }
 
     private void saveIntentDataFromEventEditor(Intent intent) {

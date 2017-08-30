@@ -21,6 +21,8 @@ public class EventsManager extends AppCompatActivity {
     private ArrayList<CheckBox> m_cbxArrltEvent;
     private ArrayList<Integer> m_iArrEventCheckBoxRId, m_iArrEventButtonRId;
     private KeyValueDB m_keyValueDB = new KeyValueDB();
+    private int m_iCheckedEventId;
+    private int m_iEventAction;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -69,10 +71,12 @@ public class EventsManager extends AppCompatActivity {
             for (int i = 0; i < iEventCheckBoxSize; i++) {
                 if (compoundButton.getId() == m_iArrEventCheckBoxRId.get(i)) {
                     if (isChecked) {
-                        m_keyValueDB.saveEventId(m_context, i);
+                        m_iCheckedEventId = i;
+                        m_iEventAction = Constants.ACTION_EVENT_ADD;
                         startNotifyService();
                     } else {
-                        m_keyValueDB.deleteEvent(m_context, i);
+                        m_iCheckedEventId = i;
+                        m_iEventAction = Constants.ACTION_EVENT_DELETE;
                         startNotifyService();
                     }
                     break;
@@ -81,12 +85,12 @@ public class EventsManager extends AppCompatActivity {
         }
     };
 
-    private void init(){
+    private void init() {
         initSharedPref();
         initButtonText();
     }
 
-    private void initSharedPref(){
+    private void initSharedPref() {
         m_context = this;
         m_keyValueDB.getPrefs(m_context);
     }
@@ -112,6 +116,7 @@ public class EventsManager extends AppCompatActivity {
 
     private void startNotifyService() {
         Intent serviceIntent = new Intent(EventsManager.this, NotifyService.class);
+        serviceIntent.putExtra(Constants.KEY_EVENT_ACTION, m_iEventAction + "," + m_iCheckedEventId);
         startService(serviceIntent);
     }
 
