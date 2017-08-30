@@ -90,7 +90,7 @@ public class EventsManager extends AppCompatActivity {
 
     private void initSharedPrefs() {
         m_context = this;
-        m_keyValueDB.getPrefs(m_context);
+        m_controller.initSharedPrefs(m_context);
     }
 
     private void initButtonText() {
