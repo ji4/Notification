@@ -54,9 +54,10 @@ public class EventEditor extends AppCompatActivity {
         m_btn_confirm.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveEventData();
-                updateDataOnHomePage();
+                getInputData();
+                m_controller.saveEventIdAndDataToBundle(m_iEventId, m_strEventData);
                 m_controller.startNotifyService(m_context);
+                updateDataOnHomePage();
                 finish();
             }
         });
@@ -127,7 +128,7 @@ public class EventEditor extends AppCompatActivity {
         }
     }
 
-    private void saveEventData() {
+    private void getInputData() {
         //event time
         int iHour = m_numPicker_hour.getValue();
         int iMin = m_numPicker_min.getValue();
@@ -160,8 +161,6 @@ public class EventEditor extends AppCompatActivity {
         }
 
         m_strEventData = strHour + "," + strMin + "," + strSec + "," + strAm_pm + "," + strNotificationType + "," + strPlaySound + "," + strCountDownChecked;
-
-        m_controller.saveEventIdAndDataToBundle(m_strEventData, m_iEventId);
     }
 
     private void switchToCountdownNumPicker() {
@@ -207,7 +206,7 @@ public class EventEditor extends AppCompatActivity {
         it.putExtra(Constants.KEY_EVENT_ID, m_iEventId);
         setResult(RESULT_OK, it);
     }
-    
+
     private void findViews() {
         m_chk_countdown = (CheckBox) findViewById(R.id.activity_event_editor_chk_countdown);
         m_numPicker_hour = (NumberPicker) findViewById(R.id.activity_event_editor_numberPicker_hour);

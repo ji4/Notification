@@ -20,10 +20,10 @@ public class Controller {
         return m_keyValueDB.getEventData(context, String.valueOf(iEventId));
     }
 
-    public void saveEventIdAndDataToBundle(String m_strEventData, int m_iEventId) {
+    public void saveEventIdAndDataToBundle(int m_iEventId, String m_strEventData) {
         m_bundle = new Bundle();
-        m_bundle.putString(Constants.KEY_EVENT_DATA, m_strEventData);
         m_bundle.putInt(Constants.KEY_EVENT_ID, m_iEventId);
+        m_bundle.putString(Constants.KEY_EVENT_DATA, m_strEventData);
     }
 
     public void startNotifyService(Context context) {
