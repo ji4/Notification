@@ -170,13 +170,13 @@ public class NotifyService extends Service {
         return calendar.getTimeInMillis();
     }
 
-    private void saveIntentData(Intent intent){
+    private void saveIntentData(Intent intent) {
         String strEventActionAndId = intent.getStringExtra(Constants.KEY_EVENT_ACTION);
         Bundle bundle = intent.getExtras();
 
         if (strEventActionAndId != null) {
             saveIntentDataFromEventsManager(strEventActionAndId);
-        }else if (bundle != null) {
+        } else if (bundle != null) {
             saveIntentDataFromEventEditor(bundle);
         }
     }
@@ -195,10 +195,10 @@ public class NotifyService extends Service {
     }
 
     private void saveIntentDataFromEventEditor(Bundle bundle) {
-            int iEventId = bundle.getInt(Constants.KEY_EVENT_ID);
-            String strEventData = bundle.getString(Constants.KEY_EVENT_DATA);
-            m_keyValueDB.setEventData(m_context, String.valueOf(iEventId), strEventData);
-            m_keyValueDB.saveEventId(m_context, iEventId);
+        int iEventId = bundle.getInt(Constants.KEY_EVENT_ID);
+        String strEventData = bundle.getString(Constants.KEY_EVENT_DATA);
+        m_keyValueDB.setEventData(m_context, String.valueOf(iEventId), strEventData);
+        m_keyValueDB.saveEventId(m_context, iEventId);
     }
 
     private void addEventIfReminderActionSet(Intent intent) {
