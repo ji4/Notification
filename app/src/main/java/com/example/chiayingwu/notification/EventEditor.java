@@ -29,7 +29,7 @@ public class EventEditor extends AppCompatActivity {
     //values
     private int m_iEventId;
     private int m_iHour, m_iMin, m_iSec, m_iAm_pm, m_iNotification, m_iSound, m_iCountdown;
-    String m_strEventData;
+    private String m_strEventData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

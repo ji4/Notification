@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class EventsManager extends AppCompatActivity {
+    private Controller m_controller = new Controller();
     private Button m_btn_time, m_btn_time2, m_btn_time3;
     private CheckBox m_checkBox, m_checkBox2, m_checkBox3;
     private static final int EVENT_EDITOR = 0;
@@ -104,7 +105,7 @@ public class EventsManager extends AppCompatActivity {
 
     private void setTimeOnButtonText(int iEventId, Button eventButton) {
         //set stored data
-        String strEventData = m_keyValueDB.getEventData(m_context, String.valueOf(iEventId));
+        String strEventData = m_controller.getEventData(m_context, iEventId);
         if (iEventId != -1 && !strEventData.equals(KeyValueDB.NO_DATA)) {
             ArrayList<Integer> iArrltEventData = DataConverter.convertToIntArray(strEventData);
             String strHour = String.valueOf(iArrltEventData.get(0));
