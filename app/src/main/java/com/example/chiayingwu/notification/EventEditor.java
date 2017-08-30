@@ -17,8 +17,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 
 public class EventEditor extends AppCompatActivity {
+    private Controller m_controller = new Controller();
     private Context m_context;
-    private KeyValueDB m_keyValueDB = new KeyValueDB();
     //widgets
     private NumberPicker m_numPicker_hour, m_numPicker_min, m_numPicker_am_pm;
     private RadioGroup m_radioGroup;
@@ -80,7 +80,7 @@ public class EventEditor extends AppCompatActivity {
     private void init() {
         /*shared prefrences*/
         m_context = this;
-        m_keyValueDB.getPrefs(m_context);
+        m_controller.initSharedPrefs(m_context);
 
         switchToTimeNumPicker();
 
@@ -97,7 +97,8 @@ public class EventEditor extends AppCompatActivity {
 
     private void setStoredData() {
         //set stored data
-        String strEventData = m_keyValueDB.getEventData(m_context, String.valueOf(m_iEventId));
+
+        String strEventData = m_controller.getEventData(m_context, m_iEventId);
         if (m_iEventId != -1 && !strEventData.equals(KeyValueDB.NO_DATA)) {
             ArrayList<Integer> iArrltEventData = DataConverter.convertToIntArray(strEventData);
             m_iHour = iArrltEventData.get(0);
