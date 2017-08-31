@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 public class KeyValueDB {
     public static String PREF_NAME = "SP";
-    public static String NO_DATA = "NO_DATA";
     private static String KEY_ID_LIST = "KEY_ID_LIST";
 
     public KeyValueDB() {
@@ -32,13 +31,13 @@ public class KeyValueDB {
     }
 
     public String getEventData(Context context, String strKeyName) {
-        return getPrefs(context).getString(strKeyName, NO_DATA);
+        return getPrefs(context).getString(strKeyName, Constants.NO_DATA);
     }
 
     public void saveEventId(Context context, int iEventId) {
         String strEventId = String.valueOf(iEventId);
         String strEventIdList = getEventIdList(context);
-        if (!strEventIdList.equals(NO_DATA)) {
+        if (!strEventIdList.equals(Constants.NO_DATA)) {
             ArrayList<Integer> iArrEventId = DataConverter.convertToIntArray(strEventIdList);
             Boolean boolEventExist = checkEventExist(iEventId, iArrEventId);
             if (!boolEventExist) {
@@ -53,7 +52,7 @@ public class KeyValueDB {
 
     public void deleteEvent(Context context, int iEventId) {
         String strEventIdList = getEventIdList(context);
-        if (!strEventIdList.equals(NO_DATA)) {
+        if (!strEventIdList.equals(Constants.NO_DATA)) {
             ArrayList<Integer> iArrEventId = DataConverter.convertToIntArray(strEventIdList);
             iArrEventId.remove(Integer.valueOf(iEventId));
             strEventIdList = DataConverter.convertToString(iArrEventId);
@@ -62,7 +61,7 @@ public class KeyValueDB {
     }
 
     public String getEventIdList(Context context) {
-        return getPrefs(context).getString(KEY_ID_LIST, NO_DATA);
+        return getPrefs(context).getString(KEY_ID_LIST, Constants.NO_DATA);
     }
 
     private Boolean checkEventExist(int iEventId, ArrayList<Integer> iArrEventId) {

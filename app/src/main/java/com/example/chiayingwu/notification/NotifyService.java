@@ -148,7 +148,7 @@ public class NotifyService extends Service {
     private ArrayList<Integer> getStoredData(int iEventId) {
         String strEventData = m_keyValueDB.getEventData(m_context, String.valueOf(iEventId));
         ArrayList<Integer> iArrltEventData = null;
-        if (iEventId != -1 && !strEventData.equals(KeyValueDB.NO_DATA)) {
+        if (iEventId != -1 && !strEventData.equals(Constants.NO_DATA)) {
             iArrltEventData = DataConverter.convertToIntArray(strEventData);
         }
         return iArrltEventData;

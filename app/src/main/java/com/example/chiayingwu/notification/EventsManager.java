@@ -102,7 +102,7 @@ public class EventsManager extends AppCompatActivity {
     private void setTimeOnButtonText(int iEventId, Button eventButton) {
         //set stored data
         String strEventData = m_controller.getEventData(m_context, iEventId);
-        if (iEventId != -1 && !strEventData.equals(KeyValueDB.NO_DATA)) {
+        if (iEventId != -1 && !strEventData.equals(Constants.NO_DATA)) {
             ArrayList<Integer> iArrltEventData = DataConverter.convertToIntArray(strEventData);
             String strHour = String.valueOf(iArrltEventData.get(0));
             String strMin = String.valueOf(iArrltEventData.get(1));

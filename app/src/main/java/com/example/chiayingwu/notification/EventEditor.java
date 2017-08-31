@@ -100,7 +100,7 @@ public class EventEditor extends AppCompatActivity {
         //set stored data
 
         String strEventData = m_controller.getEventData(m_context, m_iEventId);
-        if (m_iEventId != -1 && !strEventData.equals(KeyValueDB.NO_DATA)) {
+        if (m_iEventId != -1 && !strEventData.equals(Constants.NO_DATA)) {
             ArrayList<Integer> iArrltEventData = DataConverter.convertToIntArray(strEventData);
             m_iHour = iArrltEventData.get(0);
             m_iMin = iArrltEventData.get(1);
