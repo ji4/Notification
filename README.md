@@ -1,6 +1,6 @@
 # Notification
 
-A simple manager to send kinds of notifications at scheduled time.
+A simple manager to utilize NotifyUtil to send kinds of notifications at scheduled time.
 
 
 ## Class Relation Diagram
